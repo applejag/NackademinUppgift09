@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="sv-SE">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Nauktion</title>
 
@@ -17,37 +18,31 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nauktion</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                <p class="nav navbar-text navbar-right">Hello, @User.Identity.Name!</p>
-            </div>
-        </div>
-    </nav>
-
     <partial name="_CookieConsentPartial" />
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Nauktion</p>
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a asp-controller="Home" asp-action="Index">Auktioner</a></li>
+                    <li role="presentation"><a asp-controller="Home" asp-action="About">Om Nauktion</a></li>
+                    <li role="presentation"><a asp-controller="Home" asp-action="Contact">Kontakta oss</a></li>
+                    <li role="presentation" class="disabled" title="Not yet implemented!"><a>Logga in</a></li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Nauktion</h3>
+        </div>
+
+        <div class="row marketing">
+            @RenderBody()
+        </div>
+
+        <footer class="footer">
+            <p>&copy; @DateTime.Today.Year Nauktion</p>
+            <p>Powered by <a href="http://nackowskis.azurewebsites.net/" target="_blank">Nackowskis Auktion API &copy; 2018</a></p>
         </footer>
-    </div>
+
+    </div> <!-- /container -->
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
