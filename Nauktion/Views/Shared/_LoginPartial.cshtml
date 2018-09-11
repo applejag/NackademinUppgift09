@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Nauktion.Areas.Identity.Data
+@inject SignInManager<NauktionUser> SignInManager
+@inject UserManager<NauktionUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav nav-pills pull-right">
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hej, @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logga ut</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav nav-pills pull-right">
+        <li><a asp-area="Identity" asp-page="/Account/Login">Logga in</a></li>
+    </ul>
+}
