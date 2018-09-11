@@ -1,4 +1,5 @@
-﻿@inject SignInManager<NauktionUser> SignInManager
+﻿@using Nauktion.Models
+@inject SignInManager<NauktionUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

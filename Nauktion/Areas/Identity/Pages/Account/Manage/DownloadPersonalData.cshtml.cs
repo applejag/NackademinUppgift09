@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Nauktion.Areas.Identity.Data;
+using Nauktion.Models;
 using Newtonsoft.Json;
 
 namespace Nauktion.Areas.Identity.Pages.Account.Manage
