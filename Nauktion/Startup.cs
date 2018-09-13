@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nauktion.Models;
+using Nauktion.Repositories;
+using Nauktion.Services;
 
 namespace Nauktion
 {
@@ -34,6 +36,9 @@ namespace Nauktion
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddScoped<IAuktionRepository, AuktionRepository>();
+            services.AddScoped<IAuktionService, AuktionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
