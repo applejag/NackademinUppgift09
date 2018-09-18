@@ -25,8 +25,14 @@ namespace Nauktion.Repositories
             return new Uri(@"http://nackowskis.azurewebsites.net/api/");
         }
 
-        public async Task<List<AuktionModel>> ListAuktions(int gruppkod)
+        public int GetGruppkod()
         {
+            return 1;
+        }
+
+        public async Task<List<AuktionModel>> ListAuktions()
+        {
+            int gruppkod = GetGruppkod();
             HttpResponseMessage response = await _client.GetAsync($"Auktion/{gruppkod}");
 
             response.EnsureSuccessStatusCode();
@@ -34,8 +40,9 @@ namespace Nauktion.Repositories
             return await response.Content.ReadAsAsync<List<AuktionModel>>();
         }
 
-        public async Task<AuktionModel> GetAuktion(int gruppkod, int id)
+        public async Task<AuktionModel> GetAuktion(int id)
         {
+            int gruppkod = GetGruppkod();
             HttpResponseMessage response = await _client.GetAsync($"Auktion/{gruppkod}/{id}");
 
             response.EnsureSuccessStatusCode();

@@ -8,13 +8,16 @@ namespace Nauktion.Repositories
 {
     public interface IAuktionRepository
     {
-        [NotNull]
+        [NotNull, Pure]
         Uri GetBaseAddress();
 
-        [NotNull, ItemNotNull]
-        Task<List<AuktionModel>> ListAuktions(int gruppkod);
+        [Pure]
+        int GetGruppkod();
 
-        [NotNull, ItemCanBeNull]
-        Task<AuktionModel> GetAuktion(int gruppkod, int id);
+        [NotNull, ItemNotNull, Pure]
+        Task<List<AuktionModel>> ListAuktions();
+
+        [NotNull, ItemCanBeNull, Pure]
+        Task<AuktionModel> GetAuktion(int id);
     }
 }

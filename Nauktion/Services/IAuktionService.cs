@@ -7,12 +7,10 @@ namespace Nauktion.Services
 {
     public interface IAuktionService
     {
-        int GetGruppkod();
-
-        [NotNull, ItemNotNull]
+        [NotNull, ItemNotNull, Pure]
         Task<List<AuktionModel>> ListAuktions();
 
-        [NotNull, ItemCanBeNull]
+        [NotNull, ItemCanBeNull, Pure]
         Task<AuktionModel> GetAuktion(int id);
     }
 }

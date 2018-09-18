@@ -14,19 +14,14 @@ namespace Nauktion.Services
             _repository = repository;
         }
 
-        public int GetGruppkod()
-        {
-            return 1170;
-        }
-
         public async Task<List<AuktionModel>> ListAuktions()
         {
-            return await _repository.ListAuktions(GetGruppkod());
+            return await _repository.ListAuktions();
         }
 
         public async Task<AuktionModel> GetAuktion(int id)
         {
-            return await _repository.GetAuktion(GetGruppkod(), id);
+            return await _repository.GetAuktion(id);
         }
     }
 }
