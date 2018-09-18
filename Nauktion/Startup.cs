@@ -42,7 +42,11 @@ namespace Nauktion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<NauktionRole> roleManager)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            RoleManager<NauktionRole> roleManager,
+            UserManager<NauktionUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -59,7 +63,7 @@ namespace Nauktion
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            NauktionContext.SeedData(roleManager).GetAwaiter().GetResult();
+            NauktionContext.SeedData(roleManager, userManager).GetAwaiter().GetResult();
 
             app.UseMvc(routes =>
             {

@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<NauktionUser> SignInManager
+<!DOCTYPE html>
 <html lang="sv-SE">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Nauktion</title>
+    <title>@(string.IsNullOrWhiteSpace(ViewData["Title"] as string) ? "Nauktion" : ViewData["Title"] + " - Nauktion")</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -29,11 +31,25 @@
                     <li role="presentation"><a asp-controller="Home" asp-action="Contact">Kontakta oss</a></li>
                 </ul>
             </nav>
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Nauktion</a>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a class="navbar-brand" asp-controller="Auktion" asp-action="Index">Nauktion</a>
+            }
+            else
+            {
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Nauktion</a>
+            }
         </div>
 
         <div class="row marketing">
-            @RenderBody()
+            <h2>@ViewData["Title"]</h2>
+            <div>
+                <h4>@ViewData["Message"]</h4>
+                <hr/>
+                <div class="row">
+                    @RenderBody()
+                </div>
+            </div>
         </div>
 
         <footer class="footer">

@@ -1,20 +1,29 @@
-﻿@{
+﻿@using Nauktion.Helpers
+@using Nauktion.Models
+@inject UserManager<NauktionUser> UserManager
+@{
+    ViewData["Title"] = "Mitt konto";
+    ViewData["Message"] = "Ändra kontoinställningar";
     Layout = "/Views/Shared/_Layout.cshtml";
+
+    NauktionRoles highestRole = await UserManager.IsInRoleAsync(User, NauktionRoles.Admin) ? NauktionRoles.Admin : NauktionRoles.Regular;
+    string label = highestRole == NauktionRoles.Admin ? "label-danger" : "label-info";
 }
 
-<h2>Manage your account</h2>
+<div class="col-xs-12">
+    <h4 class="text-right">
+        <span>
+            Account rank:
+            <span class="label @label">@highestRole.ToString()</span>
+        </span>
+    </h4>
+</div>
 
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
-    </div>
+<div class="col-md-3">
+    <partial name="_ManageNav" />
+</div>
+<div class="col-md-9">
+    @RenderBody()
 </div>
 
 @section Scripts {

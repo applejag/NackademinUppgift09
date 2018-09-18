@@ -1,0 +1,22 @@
+﻿@model List<AuktionModel>
+
+@{
+    ViewData["Title"] = "Auktioner";
+
+    var list1 = Model.EveryOther();
+    var list2 = Model.Skip(1).EveryOther();
+}
+
+<div class="col-lg-6">
+    @foreach (AuktionModel m in list1)
+    {
+        <partial name="_AuktionPreviewPartialView" model="@m"/>
+    }
+</div>
+
+<div class="col-lg-6">
+    @foreach (AuktionModel m in list2)
+    {
+        <partial name="_AuktionPreviewPartialView" model="@m"/>
+    }
+</div>
