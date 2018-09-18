@@ -19,7 +19,7 @@ namespace Nauktion.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("NauktionContextConnection")));
                 
-                services.AddDefaultIdentity<NauktionUser>(config => config.Password = new PasswordOptions
+                services.AddIdentity<NauktionUser, NauktionRole>(config => config.Password = new PasswordOptions
                     {
                         RequireDigit = false,
                         RequireLowercase = false,
@@ -28,8 +28,9 @@ namespace Nauktion.Areas.Identity
                         RequiredLength = 7,
                         RequiredUniqueChars = 1
                     })
-                    .AddRoles<NauktionRole>()
-                    .AddEntityFrameworkStores<NauktionContext>();
+                    .AddDefaultUI()
+                    .AddEntityFrameworkStores<NauktionContext>()
+                    .AddDefaultTokenProviders();
             });
         }
     }
