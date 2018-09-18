@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Nauktion.Helpers;
 using Nauktion.Models;
 using Nauktion.Services;
 
 namespace Nauktion.Controllers
 {
+    [AuthorizeRole(NauktionRoles.Regular)]
     public class AuktionController : Controller
     {
         private readonly IAuktionService _service;
