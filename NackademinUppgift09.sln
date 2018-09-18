@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauktion", "Nauktion\Nauktion.csproj", "{35C334D5-D4FA-4695-82EC-347A90A2D9DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nauktion", "Nauktion\Nauktion.csproj", "{35C334D5-D4FA-4695-82EC-347A90A2D9DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauktion.Tests", "Nauktion.Tests\Nauktion.Tests.csproj", "{0F9D3187-9B40-48BA-BECD-64EF3A47DF37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{35C334D5-D4FA-4695-82EC-347A90A2D9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35C334D5-D4FA-4695-82EC-347A90A2D9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35C334D5-D4FA-4695-82EC-347A90A2D9DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F9D3187-9B40-48BA-BECD-64EF3A47DF37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F9D3187-9B40-48BA-BECD-64EF3A47DF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F9D3187-9B40-48BA-BECD-64EF3A47DF37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F9D3187-9B40-48BA-BECD-64EF3A47DF37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
