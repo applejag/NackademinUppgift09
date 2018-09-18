@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 using Nauktion.Models;
 using Nauktion.Repositories;
 
@@ -8,27 +8,25 @@ namespace Nauktion.Services
     public class AuktionService : IAuktionService
     {
         private readonly IAuktionRepository _repository;
-        private readonly IConfiguration _configuration;
 
-        public AuktionService(IAuktionRepository repository, IConfiguration configuration)
+        public AuktionService(IAuktionRepository repository)
         {
             _repository = repository;
-            _configuration = configuration;
         }
 
         public int GetGruppkod()
         {
-            return _configuration.GetValue<int>("NackowskisGruppkod");
+            return 1170;
         }
 
-        public List<AuktionModel> ListAuktions()
+        public async Task<List<AuktionModel>> ListAuktions()
         {
-            return _repository.ListAuktions(GetGruppkod());
+            return await _repository.ListAuktions(GetGruppkod());
         }
 
-        public AuktionModel GetAuktion(int id)
+        public async Task<AuktionModel> GetAuktion(int id)
         {
-            return _repository.GetAuktion(GetGruppkod(), id);
+            return await _repository.GetAuktion(GetGruppkod(), id);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Nauktion.Models;
 
@@ -6,10 +8,13 @@ namespace Nauktion.Repositories
 {
     public interface IAuktionRepository
     {
-        [NotNull, ItemNotNull]
-        List<AuktionModel> ListAuktions(int gruppkod);
+        [NotNull]
+        Uri GetBaseAddress();
 
-        [CanBeNull]
-        AuktionModel GetAuktion(int gruppkod, int id);
+        [NotNull, ItemNotNull]
+        Task<List<AuktionModel>> ListAuktions(int gruppkod);
+
+        [NotNull, ItemCanBeNull]
+        Task<AuktionModel> GetAuktion(int gruppkod, int id);
     }
 }

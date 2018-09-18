@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Nauktion.Models;
 
@@ -9,9 +10,9 @@ namespace Nauktion.Services
         int GetGruppkod();
 
         [NotNull, ItemNotNull]
-        List<AuktionModel> ListAuktions();
+        Task<List<AuktionModel>> ListAuktions();
 
-        [CanBeNull]
-        AuktionModel GetAuktion(int id);
+        [NotNull, ItemCanBeNull]
+        Task<AuktionModel> GetAuktion(int id);
     }
 }
