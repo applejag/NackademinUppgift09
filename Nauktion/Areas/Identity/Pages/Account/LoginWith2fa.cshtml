@@ -1,12 +1,10 @@
 ﻿@page
 @model LoginWith2faModel
 @{
-    ViewData["Title"] = "Two-factor authentication";
+    ViewData["Title"] = "Två-faktor authentikering";
+    ViewData["Message"] = "Ditt konto är låst via en authentikeringsapp. Ange authentikeringskoden nedan."
 }
 
-<h2>@ViewData["Title"]</h2>
-<hr />
-<p>Your login is protected with an authenticator app. Enter your authenticator code below.</p>
 <div class="row">
     <div class="col-md-4">
         <form method="post" asp-route-returnUrl="@Model.ReturnUrl">

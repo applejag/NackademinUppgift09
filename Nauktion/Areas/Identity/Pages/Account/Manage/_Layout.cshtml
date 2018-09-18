@@ -4,26 +4,28 @@
 @{
     ViewData["Title"] = "Mitt konto";
     ViewData["Message"] = "Ändra kontoinställningar";
-    Layout = "/Views/Shared/_Layout.cshtml";
+    Layout = "/Views/Shared/_LayoutWithHeader.cshtml";
 
     NauktionRoles highestRole = await UserManager.IsInRoleAsync(User, NauktionRoles.Admin) ? NauktionRoles.Admin : NauktionRoles.Regular;
     string label = highestRole == NauktionRoles.Admin ? "label-danger" : "label-info";
 }
 
-<div class="col-xs-12">
-    <h4 class="text-right">
-        <span>
-            Account rank:
-            <span class="label @label">@highestRole.ToString()</span>
-        </span>
-    </h4>
-</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h4 class="text-right">
+            <span>
+                Account rank:
+                <span class="label @label">@highestRole.ToString()</span>
+            </span>
+        </h4>
+    </div>
 
-<div class="col-md-3">
-    <partial name="_ManageNav" />
-</div>
-<div class="col-md-9">
-    @RenderBody()
+    <div class="col-md-3">
+        <partial name="_ManageNav" />
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
+    </div>
 </div>
 
 @section Scripts {

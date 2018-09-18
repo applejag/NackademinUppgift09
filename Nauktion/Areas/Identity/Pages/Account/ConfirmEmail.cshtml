@@ -1,12 +1,10 @@
 ﻿@page
 @model ConfirmEmailModel
 @{
-    ViewData["Title"] = "Confirm email";
+    ViewData["Title"] = "E-post bekräftad";
+    ViewData["Message"] = "Din e-post har nu blivit bekräftad.";
 }
 
-<h2>@ViewData["Title"]</h2>
-<div>
-    <p>
-        Thank you for confirming your email.
-    </p>
-</div>
+<p>
+    <a asp-controller="Home" asp-action="Index">Klicka här</a> för att återgå till startsidan.
+</p>

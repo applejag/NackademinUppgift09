@@ -41,12 +41,15 @@
             }
         </div>
 
-        <div class="row marketing">
+        <div class="marketing">
             <h2>@ViewData["Title"]</h2>
             <div>
-                <h4>@ViewData["Message"]</h4>
+                @if (!string.IsNullOrWhiteSpace(ViewData["Message"] as string))
+                {
+                    <h4>@ViewData["Message"]</h4>
+                }
                 <hr/>
-                <div class="row">
+                <div>
                     @RenderBody()
                 </div>
             </div>
