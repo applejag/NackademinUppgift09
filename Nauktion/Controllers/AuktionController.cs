@@ -17,12 +17,22 @@ namespace Nauktion.Controllers
         {
             _service = service;
         }
-
+        
         public async Task<IActionResult> Index()
         {
             List<AuktionModel> auktions = await _service.ListAuktions();
 
             return View(auktions);
+        }
+        
+        public async Task<IActionResult> View(int id)
+        {
+            AuktionModel auktion = await _service.GetAuktion(id);
+
+            if (auktion == null)
+                return RedirectToAction("Index");
+
+            return View("Auktion", auktion);
         }
     }
 }

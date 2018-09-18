@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model AuktionModel
+@inject UserManager<NauktionUser> UserManager
+@{
+    string author = string.IsNullOrWhiteSpace(Model.SkapadAv)
+        ? "<not found>"
+        : (await UserManager.FindByIdAsync(Model.SkapadAv)
+            ?? await UserManager.FindByEmailAsync(Model.SkapadAv))?.UserName
+            ?? "<not found>";
+
+    ViewData["Title"] = Model.Titel;
+    ViewData["Message"] = $"Auktion skapad av {author}";
+}
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="label label-success auktion-money">@Model.Utropspris0.ToString("C0")</div>
+        <p>
+            Utropspris: <span class="badge">@Model.Utropspris0.ToString("C0")</span>
+        </p>
+        <p>
+            Högsta bud: <span class="badge">@Model.Utropspris0.ToString("C0")</span> <i class="text-muted">(utav 0 st)</i>
+        </p>
+    </div>
+    <div class="col-sm-6">
+        <p class="text-muted">
+            @(Model.IsClosed ? "Avslutades" : "Avslutas") @Model.TimeUntilEndFormatted<br />
+            @Model.SlutDatum.ToString("f")
+        </p>
+        <p class="text-muted">
+            @(Model.IsClosed ? "Öppnades" : "Öppnas") @Model.TimeSinceStartFormatted<br />
+            @Model.StartDatum.ToString("f")
+        </p>
+        <p>
+            @Model.Beskrivning
+        </p>
+    </div>
+</div>

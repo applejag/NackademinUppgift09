@@ -79,3 +79,14 @@ body {
         border-bottom: 0;
     }
 }
+
+/* Bootstrap fixes */
+abbr {
+    text-decoration: none;
+}
+
+/* Humongous text */
+.auktion-money {
+    font-size: 3em;
+    display: block;
+}

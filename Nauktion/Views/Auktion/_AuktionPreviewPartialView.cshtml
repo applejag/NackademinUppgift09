@@ -1,6 +1,20 @@
 ﻿@model AuktionModel
 
-<div>
-    <strong>@Model.Titel</strong>
-    @Model.Beskrivning
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <a asp-action="View" asp-route-id="@Model.AuktionID">
+                @Model.Titel
+            </a>
+            <span class="pull-right label label-success">
+                @Model.Utropspris0.ToString("C0")
+            </span>
+        </h3>
+    </div>
+    <div class="panel-body">
+        @Model.Beskrivning
+    </div>
+    <div class="panel-footer">
+        @(Model.IsClosed ? "Avslutades" : "Avslutas") <abbr data-toggle="tooltip" title="@Model.SlutDatum.ToString("f")">@Model.TimeUntilEndFormatted</abbr>
+    </div>
 </div>

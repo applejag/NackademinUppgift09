@@ -49,7 +49,7 @@ namespace Nauktion.Helpers
                     return $"den {end:d} förra månaden, {end:MMMM}";
                 case 0:
                     return end < now
-                        ? $"{-span.Days} dagar sedan nu i {end:MMMM}"
+                        ? $"för {-span.Days} dagar sedan nu i {end:MMMM}"
                         : $"om {span.Days} dagar nu i {end:MMMM}";
                 case 1:
                     return $"den {end:d} nästa månad, {end:MMMM}";
