@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +22,11 @@ namespace Nauktion.Controllers
         public async Task<IActionResult> Index()
         {
             List<AuktionModel> auktions = await _service.ListAuktionsAsync();
+            List<AuktionBudViewModel> model = auktions
+                .Select(a => new AuktionBudViewModel(a, new List<BudModel>()))
+                .ToList();
 
-            return View(auktions);
+            return View(model);
         }
         
         public async Task<IActionResult> View(int id)
@@ -32,7 +36,9 @@ namespace Nauktion.Controllers
             if (auktion == null)
                 return RedirectToAction("Index");
 
-            return View("Auktion", auktion);
+            var model = new AuktionBudViewModel(auktion, new List<BudModel>());
+
+            return View("Auktion", model);
         }
     }
 }

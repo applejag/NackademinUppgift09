@@ -1,4 +1,4 @@
-﻿@model List<AuktionModel>
+﻿@model List<AuktionBudViewModel>
 
 @{
     ViewData["Title"] = "Auktioner";
@@ -10,14 +10,14 @@
 
 <div class="row">
     <div class="col-sm-6">
-        @foreach (AuktionModel m in list1)
+        @foreach (AuktionBudViewModel m in list1)
         {
             <partial name="_AuktionPreviewPartialView" model="@m"/>
         }
     </div>
 
     <div class="col-sm-6">
-        @foreach (AuktionModel m in list2)
+        @foreach (AuktionBudViewModel m in list2)
         {
             <partial name="_AuktionPreviewPartialView" model="@m"/>
         }

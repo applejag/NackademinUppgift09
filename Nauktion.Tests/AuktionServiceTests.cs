@@ -41,7 +41,7 @@ namespace Nauktion.Tests
 
             List<AuktionModel> modelList = GetMeSomeAuktions();
             List<AuktionModel> expected = modelList
-                .Where(a => !a.IsClosed)
+                .Where(a => !a.IsClosed())
                 .ToList();
 
             mockRepo.Setup(t => t.ListAuktionsAsync())

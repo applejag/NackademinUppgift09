@@ -19,7 +19,7 @@ namespace Nauktion.Services
         public async Task<List<AuktionModel>> ListAuktionsAsync(bool includeClosed = false)
         {
             List<AuktionModel> list = await _repository.ListAuktionsAsync();
-            return list.WhereIf(!includeClosed, a => !a.IsClosed)
+            return list.WhereIf(!includeClosed, a => !a.IsClosed())
                 .OrderBy(a => a.StartDatum)
                 .ToList();
         }

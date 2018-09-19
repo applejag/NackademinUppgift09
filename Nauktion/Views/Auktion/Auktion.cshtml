@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model AuktionModel
+@model AuktionBudViewModel
 @inject UserManager<NauktionUser> UserManager
 @{
     string author = string.IsNullOrWhiteSpace(Model.SkapadAv)
@@ -15,15 +15,22 @@
 
 <div class="row">
     <div class="col-sm-6">
-        <div class="label label-success auktion-money">@Model.Utropspris0.ToString("C0")</div>
+        <h2 class="label label-success auktion-money" style="margin-top: 0;">@Model.HighestBid.ToString("C0")</h2>
         <p>
-            Utropspris: <span class="badge">@Model.Utropspris0.ToString("C0")</span>
+            Utropspris: <span class="badge">@Model.Utropspris.ToString("C0")</span>
         </p>
         <p>
-            Högsta bud: <span class="badge">@Model.Utropspris0.ToString("C0")</span> <i class="text-muted">(utav 0 st)</i>
+            Högsta bud: <span class="badge">@(Model.Bids.Count == 0 ? "N/A" : Model.HighestBid.ToString("C0"))</span>
+        </p>
+        <p>
+            Antal bud: @Model.Bids.Count st
         </p>
     </div>
     <div class="col-sm-6">
+        <p>
+            @Model.Beskrivning
+        </p>
+        <hr/>
         <p class="text-muted">
             @(Model.IsClosed ? "Avslutades" : "Avslutas") @Model.TimeUntilEndFormatted<br />
             @Model.SlutDatum.ToString("f")
@@ -31,9 +38,6 @@
         <p class="text-muted">
             @(Model.IsClosed ? "Öppnades" : "Öppnas") @Model.TimeSinceStartFormatted<br />
             @Model.StartDatum.ToString("f")
-        </p>
-        <p>
-            @Model.Beskrivning
         </p>
     </div>
 </div>
