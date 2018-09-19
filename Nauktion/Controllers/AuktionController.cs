@@ -21,22 +21,17 @@ namespace Nauktion.Controllers
         
         public async Task<IActionResult> Index()
         {
-            List<AuktionModel> auktions = await _service.ListAuktionsAsync();
-            List<AuktionBudViewModel> model = auktions
-                .Select(a => new AuktionBudViewModel(a, new List<BudModel>()))
-                .ToList();
+            List<AuktionBudViewModel> model = await _service.ListAuktionBudsAsync();
 
             return View(model);
         }
         
         public async Task<IActionResult> View(int id)
         {
-            AuktionModel auktion = await _service.GetAuktionAsync(id);
+            AuktionBudViewModel model = await _service.GetAuktionBudsAsync(id);
 
-            if (auktion == null)
+            if (model == null)
                 return RedirectToAction("Index");
-
-            var model = new AuktionBudViewModel(auktion, new List<BudModel>());
 
             return View(model);
         }
