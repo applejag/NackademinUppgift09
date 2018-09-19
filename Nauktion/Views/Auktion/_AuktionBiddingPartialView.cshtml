@@ -1,8 +1,5 @@
 ﻿@using System.Globalization
 @model BiddingViewModel
-@{
-    string disabled = Model.Errors.Count > 0 ? "disabled" : string.Empty;
-}
 
 <form asp-controller="Auktion" asp-action="Bid" method="post">
     <input asp-for="AuktionID" type="hidden" value="@Model.AuktionID" />
@@ -10,15 +7,15 @@
 
     <div class="text-danger">
         <span asp-validation-for="Summa">
-            @string.Join("<br>", Model.Errors)
+            @{ WriteLiteral(string.Join("<br>", Model.Errors)); }
         </span>
     </div>
 
     <div class="input-group">
         <span class="input-group-addon">@RegionInfo.CurrentRegion.CurrencySymbol</span>
-        <input asp-for="Summa" class="form-control" placeholder="Summa..." @disabled />
+        <input asp-for="Summa" class="form-control" placeholder="Summa..." />
         <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" @disabled>Buda!</button>
+            <button type="submit" class="btn btn-primary">Buda!</button>
         </span>
     </div>
 </form>

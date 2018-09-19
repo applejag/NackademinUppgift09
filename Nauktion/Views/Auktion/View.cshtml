@@ -11,20 +11,15 @@
     bool youWon = (await UserManager.GetUserAsync(User)).Id == winner?.Id;
     bool justBidded = TempData["BidSuccess"] is true;
 
-    BiddingViewModel bidding = ViewData["BidModel"] as BiddingViewModel
-        ?? new BiddingViewModel
-        {
-            AuktionID = Model.AuktionID,
-            Summa = Model.MaxedPrice * 10 / 10 + 10
-        };
+    var bidding = new BiddingViewModel
+    {
+        AuktionID = Model.AuktionID,
+        Summa = Model.MaxedPrice * 10 / 10 + 10,
+    };
 
-    if (Model.IsClosed)
+    if (TempData["BidErrors"] is string[] errors)
     {
-        bidding.Errors.Add($"Denna auktion är stängd! Det går inte längre att buda på denna auktion då den stängdes {Model.TimeUntilEndFormatted}.");
-    }
-    else if (youWon)
-    {
-        bidding.Errors.Add("Ditt bud är det ledande just nu! Du kan inte buda mer för nuläget.");
+        bidding.Errors.AddRange(errors);
     }
 
     string authorName = author?.UserName ?? "<not found>";
@@ -36,28 +31,30 @@
 
 
 <div class="row">
-    @if (Model.IsClosed)
-    {
-        if (Model.HighestBid is null)
+    <div class="col-xs-12">
+        @if (Model.IsClosed)
         {
-            <div class="alert alert-warning">
-                <strong>Auktion över! Ingen vann denna auktion!</strong> Auktionen har stängts och det blev inga bud under auktionens livstid.
+            if (Model.HighestBid is null)
+            {
+                <div class="alert alert-warning">
+                    <strong>Auktion över! Ingen vann denna auktion!</strong> Auktionen har stängts och det blev inga bud under auktionens livstid.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-success">
+                    <strong>Auktion över! Grattis till @winnerName som vann auktionen!</strong> Auktionen har stängts. Det går alltså inte att buda på denna auktion längre.
+                </div>
+            }
+        }
+        @if (justBidded)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Ditt bud är lagt!</strong> Ditt bud har lyckats läggas på denna auktion.
             </div>
         }
-        else
-        {
-            <div class="alert alert-success">
-                <strong>Auktion över! Grattis till @winnerName som vann auktionen!</strong> Auktionen har stängts. Det går alltså inte att buda på denna auktion längre.
-            </div>
-        }
-    }
-    @if (justBidded)
-    {
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>Ditt bud är lagt!</strong> Ditt bud har lyckats läggas på denna auktion.
-        </div>
-    }
+    </div>
     <div class="col-sm-6">
         <h2 class="label label-success auktion-money" style="margin-top: 0;">@Model.MaxedPrice.ToString("C0")</h2>
         <p>
@@ -76,13 +73,13 @@
         <div>
             @Model.Beskrivning
         </div>
-        <hr />
+        <hr/>
         <p class="text-muted">
-            @(Model.IsClosed ? "Avslutades" : "Avslutas") @Model.TimeUntilEndFormatted<br />
+            @(Model.IsClosed ? "Avslutades" : "Avslutas") @Model.TimeUntilEndFormatted<br/>
             @Model.SlutDatum.ToString("f")
         </p>
         <p class="text-muted">
-            @(Model.IsClosed ? "Öppnades" : "Öppnas") @Model.TimeSinceStartFormatted<br />
+            @(Model.IsClosed ? "Öppnades" : "Öppnas") @Model.TimeSinceStartFormatted<br/>
             @Model.StartDatum.ToString("f")
         </p>
     </div>

@@ -38,7 +38,14 @@ namespace Nauktion.Repositories
 
         public async Task CreateBudAsync(BudModel model)
         {
-            HttpResponseMessage response = await _client.PostAsJsonAsync("bud", model);
+            var formdata = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                [nameof(model.AuktionID)] = model.AuktionID.ToString(),
+                [nameof(model.Budgivare)] = model.Budgivare,
+                [nameof(model.Summa)] = model.Summa.ToString()
+            });
+
+            HttpResponseMessage response = await _client.PostAsync("bud", formdata);
 
             response.EnsureSuccessStatusCode();
         }

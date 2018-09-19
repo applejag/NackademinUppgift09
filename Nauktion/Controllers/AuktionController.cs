@@ -38,12 +38,17 @@ namespace Nauktion.Controllers
             if (model == null)
                 return RedirectToAction("Index");
 
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+
+            string error = await _service.ValidateBud(model.AuktionID, model.MaxedPrice + 1, currentUser);
+            if (!(error is null))
+                TempData["BidErrors"] = new[] { error };
+
             return View(model);
         }
 
         public async Task<IActionResult> Bid(BiddingViewModel bid)
         {
-            TempData["BidModel"] = bid;
             NauktionUser currentUser = await _userManager.GetUserAsync(User);
 
             // Validate
@@ -58,9 +63,9 @@ namespace Nauktion.Controllers
             // Redirect if invalid
             if (!ModelState.IsValid)
             {
-                bid.Errors = ModelState[nameof(bid.Summa)].Errors
+                TempData["BidErrors"] = ModelState[nameof(bid.Summa)].Errors
                     .Select(e => e.ErrorMessage)
-                    .ToList();
+                    .ToArray();
 
                 return RedirectToAction("View", new {id = bid.AuktionID});
             }

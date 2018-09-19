@@ -58,6 +58,9 @@ namespace Nauktion.Services
             if (auktion is null)
                 return "Auktionen finns inte.";
 
+            if (auktion.IsClosed())
+                return "Du kan inte buda på en stängd auktion.";
+
             if (summa <= auktion.Utropspris)
                 return "Budet måste vara större än utropspriset.";
             
