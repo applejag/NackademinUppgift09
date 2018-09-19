@@ -28,7 +28,7 @@ namespace Nauktion.Helpers
                     : $"om {(int) span.TotalHours} timmar";
             }
 
-            if (now.Date == end.Date.AddDays(1))
+            if (now.Date.AddDays(1) == end.Date)
             {
                 if (end.Hour < 11)
                     return "imorgon bitti";
@@ -37,7 +37,7 @@ namespace Nauktion.Helpers
                 return "imorgon vid lunchtid";
             }
 
-            if (now.Date == end.Date.AddDays(-1))
+            if (now.Date.AddDays(-1) == end.Date)
             {
                 if (end.Hour < 11)
                     return "igår bitti";
