@@ -22,6 +22,12 @@
             <partial name="_AuktionPreviewPartialView" model="@m"/>
         }
     </div>
+    @if (Model.Count == 0)
+    {
+        <div class="col-xs-12">
+            <i class="text-muted">(Det finns inga öppna auktioner just nu. Titta förbi senare!)</i>
+        </div>
+    }
 </div>
 
 @section Scripts
