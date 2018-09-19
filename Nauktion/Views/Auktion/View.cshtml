@@ -14,7 +14,7 @@
     var bidding = new BiddingViewModel
     {
         AuktionID = Model.AuktionID,
-        Summa = Model.MaxedPrice * 10 / 10 + 10,
+        Summa = Model.MaxedPrice / 10 * 10 + 10,
     };
 
     if (TempData["BidErrors"] is string[] errors)
