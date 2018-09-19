@@ -11,17 +11,39 @@ namespace Nauktion.Helpers
         public static string FormatRemainingTime(DateTime end)
         {
             DateTime now = DateTime.Now;
+            TimeSpan span = end - now;
 
             // Same day
             if (now.Date == end.Date)
             {
+                if (Math.Abs(span.TotalHours) < 1)
+                {
+                    return end < now
+                        ? $"för {-span.Minutes} minuter sedan"
+                        : $"om {span.Minutes} minuter";
+                }
+
                 return end < now
-                    ? (end.Hour < 12
-                        ? "i morse"
-                        : "tidigare idag")
-                    : (end.Hour > 15
-                        ? "senare ikväll"
-                        : "senare idag");
+                    ? $"for {(int) -span.TotalHours} timmar sedan"
+                    : $"om {(int) span.TotalHours} timmar";
+            }
+
+            if (now.Date == end.Date.AddDays(1))
+            {
+                if (end.Hour < 11)
+                    return "imorgon bitti";
+                if (end.Hour > 16)
+                    return "imorgon kväll";
+                return "imorgon vid lunchtid";
+            }
+
+            if (now.Date == end.Date.AddDays(-1))
+            {
+                if (end.Hour < 11)
+                    return "igår bitti";
+                if (end.Hour > 16)
+                    return "igår kväll";
+                return "igår vid lunchtid";
             }
 
             // Same week
@@ -33,16 +55,15 @@ namespace Nauktion.Helpers
                 case 0:
                     return end < now
                         ? $"i {end:dddd}s denna vecka"  // i torsdags
-                        : $"denna vecka på {end:dddd}"; // på torsdag
+                        : $"på {end:dddd} denna vecka"; // på torsdag
                 case 1:
-                    return $"nästa vecka på {end:dddd}"; // torsdag
+                    return $"på {end:dddd} nästa vecka"; // torsdag
                 case 2:
-                    return $"om två veckor på {end:dddd}"; // torsdag
+                    return $"på {end:dddd} om två veckor"; // torsdag
             }
 
             // Months?
             int monthsDiff = GetMonthDifference(now, end);
-            TimeSpan span = end - now;
             switch (monthsDiff)
             {
                 case -1:
