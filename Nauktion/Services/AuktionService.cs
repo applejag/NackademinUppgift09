@@ -36,9 +36,14 @@ namespace Nauktion.Services
                 .ToList();
         }
 
-        public async Task CreateBudAsync(BudModel model)
+        public async Task CreateBudAsync(int auktionID, int summa, NauktionUser budgivare)
         {
-            await _repository.CreateBudAsync(model);
+            await _repository.CreateBudAsync(new BudModel
+            {
+                AuktionID = auktionID,
+                Summa = summa,
+                Budgivare = budgivare.Id
+            });
         }
     }
 }
