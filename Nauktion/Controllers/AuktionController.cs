@@ -44,17 +44,15 @@ namespace Nauktion.Controllers
         public async Task<IActionResult> Bid(BiddingViewModel bid)
         {
             TempData["BidModel"] = bid;
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
 
-            // Validate against API
+            // Validate
             if (ModelState.IsValid)
             {
-                IActionResult result = await new AuktionAPIController(_service, _userManager)
-                    .VerifyBudSumma(bid.AuktionID, bid.Summa);
+                string error = await _service.ValidateBud(bid.AuktionID, bid.Summa, currentUser);
 
-                if (result is JsonResult json && json.Value is string error)
-                {
+                if (!(error is null))
                     ModelState.AddModelError(nameof(bid.Summa), error);
-                }
             }
 
             // Redirect if invalid
@@ -68,7 +66,8 @@ namespace Nauktion.Controllers
             }
 
             // Valid! Let's create that bid!
-            //TODO:
+            await _service.CreateBudAsync(bid.AuktionID, bid.Summa, currentUser);
+
             TempData["BidSuccess"] = true;
             return RedirectToAction("View", new {id = bid.AuktionID});
         }

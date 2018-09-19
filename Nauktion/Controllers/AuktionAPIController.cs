@@ -30,28 +30,14 @@ namespace Nauktion.Controllers
         [Route(nameof(VerifyBudSumma))]
         public async Task<IActionResult> VerifyBudSumma(int AuktionID, int Summa)
         {
-            AuktionBudViewModel auktion = await _service.GetAuktionBudsAsync(AuktionID);
-
-            if (auktion is null)
-            {
-                return NotFound();
-            }
-
-            if (Summa <= auktion.MaxedPrice)
-            {
-                return auktion.HighestBid is null 
-                    ? new JsonResult("Budet måste vara större än utropspriset.") 
-                    : new JsonResult("Budet måste vara större än det högsta budet.");
-            }
-
-            NauktionUser topBidder = await _userManager.FindByIdAsync(auktion.HighestBid?.Budgivare);
             NauktionUser currentUser = await _userManager.GetUserAsync(User);
-            if (topBidder?.Id == currentUser.Id)
-            {
-                return new JsonResult("Du kan inte buda när du har högsta budet.");
-            }
 
-            return new JsonResult(true);
+            string error = await _service.ValidateBud(AuktionID, Summa, currentUser);
+
+            if (error is null)
+                return new JsonResult(true);
+
+            return new JsonResult(error);
         }
     }
 }

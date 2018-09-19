@@ -18,5 +18,8 @@ namespace Nauktion.Services
 
         [NotNull]
         Task CreateBudAsync(int auktionID, int summa, [NotNull] NauktionUser budgivare);
+
+        [NotNull, ItemCanBeNull, Pure]
+        Task<string> ValidateBud(int auktionID, int summa, [NotNull] NauktionUser budgivare);
     }
 }

@@ -18,7 +18,7 @@ namespace Nauktion.Tests
         {
             // Arrange
             var mockRepo = new Mock<IAuktionRepository>();
-            var service = new AuktionService(mockRepo.Object);
+            var service = new AuktionService(mockRepo.Object, null);
 
             var model = new AuktionModel();
             mockRepo.Setup(t => t.GetAuktionAsync(It.IsAny<int>()))
@@ -38,7 +38,7 @@ namespace Nauktion.Tests
         {
             // Arrange
             var mockRepo = new Mock<IAuktionRepository>();
-            var service = new AuktionService(mockRepo.Object);
+            var service = new AuktionService(mockRepo.Object, null);
 
             List<AuktionModel> modelList = GetMeSomeAuktions();
             List<AuktionModel> expected = modelList
@@ -62,7 +62,7 @@ namespace Nauktion.Tests
         {
             // Arrange
             var mockRepo = new Mock<IAuktionRepository>();
-            var service = new AuktionService(mockRepo.Object);
+            var service = new AuktionService(mockRepo.Object, null);
 
             List<AuktionModel> modelList = GetMeSomeAuktions();
             List<AuktionModel> expected = modelList
@@ -86,7 +86,7 @@ namespace Nauktion.Tests
         {
             // Arrange
             var mockRepo = new Mock<IAuktionRepository>();
-            var service = new AuktionService(mockRepo.Object);
+            var service = new AuktionService(mockRepo.Object, null);
 
             List<BudModel> modelList = GetMeSomeBuds(1);
             List<BudModel> expected = modelList.OrderByDescending(b => b.Summa).ToList();
@@ -108,7 +108,7 @@ namespace Nauktion.Tests
         {
             // Arrange
             var mockRepo = new Mock<IAuktionRepository>();
-            var service = new AuktionService(mockRepo.Object);
+            var service = new AuktionService(mockRepo.Object, null);
             BudModel obj = null;
             var user = new NauktionUser {Id = "abcdef"};
 

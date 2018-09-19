@@ -16,9 +16,9 @@
 
     <div class="input-group">
         <span class="input-group-addon">@RegionInfo.CurrentRegion.CurrencySymbol</span>
-        <input asp-for="Summa" class="form-control" placeholder="Summa..." disabled="@disabled" />
+        <input asp-for="Summa" class="form-control" placeholder="Summa..." @disabled />
         <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" disabled="@disabled">Buda!</button>
+            <button type="submit" class="btn btn-primary" @disabled>Buda!</button>
         </span>
     </div>
 </form>
