@@ -6,8 +6,8 @@
     ViewData["Message"] = "Ändra kontoinställningar";
     Layout = "/Views/Shared/_LayoutWithHeader.cshtml";
 
-    NauktionRoles highestRole = await UserManager.IsInRoleAsync(User, NauktionRoles.Admin) ? NauktionRoles.Admin : NauktionRoles.Regular;
-    string label = highestRole == NauktionRoles.Admin ? "label-danger" : "label-info";
+    NauktionRoles highestRole = (await UserManager.GetNauktionRolesAsync(User)).HighestRole();
+    string label = highestRole.RoleLabelClassColor();
 }
 
 <div class="row">

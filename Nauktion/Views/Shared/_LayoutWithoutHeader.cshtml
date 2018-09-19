@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<NauktionUser> SignInManager
+@inject UserManager<NauktionUser> UserManager
 <!DOCTYPE html>
 <html lang="sv-SE">
 <head>
@@ -54,6 +55,10 @@
         </div>
 
         <footer class="footer">
+            @if (await UserManager.IsInRoleAsync(User, NauktionRoles.Admin))
+            {
+                <p class="pull-right"><a asp-controller="Admin" asp-action="Index" class="text-danger">Admin</a></p>
+            }
             <p>&copy; @DateTime.Today.Year Nauktion</p>
             <p>Powered by <a href="http://nackowskis.azurewebsites.net/" target="_blank">Nackowskis Auktion API &copy; 2018</a></p>
         </footer>

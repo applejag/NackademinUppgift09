@@ -39,5 +39,27 @@ namespace Nauktion.Helpers
         {
             return (await userManager.GetRolesAsync(user)).Select(role => Enum.Parse<NauktionRoles>(role, true)).ToList();
         }
+
+        public static async Task<IList<NauktionRoles>> GetNauktionRolesAsync(this UserManager<NauktionUser> userManager, ClaimsPrincipal user)
+        {
+            return (await userManager.GetRolesAsync(await userManager.GetUserAsync(user))).Select(role => Enum.Parse<NauktionRoles>(role, true)).ToList();
+        }
+
+        public static NauktionRoles HighestRole(this IEnumerable<NauktionRoles> roles)
+        {
+            return (NauktionRoles) roles.Cast<int>().Max();
+        }
+
+        public static string RoleLabelClassColor(this NauktionRoles role)
+        {
+            switch (role)
+            {
+                case NauktionRoles.Admin:
+                    return "label-danger";
+
+                default:
+                    return "label-info";
+            }
+        }
     }
 }

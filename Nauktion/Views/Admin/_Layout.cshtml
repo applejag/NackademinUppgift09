@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = "_LayoutWithHeader";
+
+    ViewData["Title"] = "Administration";
+    ViewData["Message"] = "Här kan man styra på grejer, minsann.";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h4 class="text-right">
+            <span>
+                Account rank:
+                <span class="label label-danger">Admin</span>
+            </span>
+        </h4>
+    </div>
+
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a asp-controller="Admin" asp-action="Index">Start</a></li>
+            <li><a asp-controller="Admin" asp-action="Users">Användare</a></li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
+    </div>
+</div>
+
+@section Scripts
+{
+    @RenderSection("Scripts", required: false)
+}
