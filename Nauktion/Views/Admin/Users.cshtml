@@ -8,38 +8,52 @@
     <thead>
         <tr>
             <th>Användarnamn</th>
-            <th>E-post adress</th>
             <th>Telefonnummer</th>
             <th>Högsta roll</th>
             <th>Befodra</th>
         </tr>
     </thead>
     <tbody>
-    @foreach (NauktionUser user in Model)
-    {
-        NauktionRoles role = (await UserManager.GetNauktionRolesAsync(user)).HighestRole();
-        string color = role.RoleLabelClassColor();
-        <tr>
-            <td>@user.UserName</td>
-            <td>@user.Email.ToLower()</td>
-            <td>
-                @if (string.IsNullOrWhiteSpace(user.PhoneNumber))
-                {
-                    <i class="text-muted">N/A</i>
-                }
-                else
-                {
-                    @user.PhoneNumber
-                }
-            </td>
-            <td>
-                <span class="label @color">@role.ToString()</span>
-                @if (role != NauktionRoles.Admin)
-                {
-                    <a asp-action="ElevateUser" asp-route-id="@user.Id" class="btn btn-success"><span class="glyphicon glyphicon-circle-arrow-up"></span></a>
-                }
-            </td>
-        </tr>
-    }
+        @foreach (NauktionUser user in Model)
+        {
+            NauktionRoles role = (await UserManager.GetNauktionRolesAsync(user)).HighestRole();
+            string color = role.RoleLabelClassColor();
+            <tr>
+                <td>@user.UserName</td>
+                <td>
+                    @if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                    {
+                        <i class="text-muted">N/A</i>
+                    }
+                    else
+                    {
+                        @user.PhoneNumber
+                    }
+                </td>
+                <td>
+                    <span class="label @color">@role.ToString()</span>
+                </td>
+                <td>
+                    @if (role != NauktionRoles.Admin)
+                    {
+                        <a asp-action="ElevateUser" asp-route-id="@user.Id" class="btn btn-success">&uArr;</a>
+                    }
+                    else
+                    {
+                        <span class="badge" data-toggle="tooltip" title="Användaren har redan rollen Admin">&times;</span>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

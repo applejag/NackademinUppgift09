@@ -12,7 +12,10 @@ namespace Nauktion.Helpers
     {
         public static async Task<bool> IsInRoleAsync(this UserManager<NauktionUser> userManager, ClaimsPrincipal user, NauktionRoles role)
         {
-            return await userManager.IsInRoleAsync(await userManager.GetUserAsync(user), role.ToString());
+            NauktionUser nauktionUser = await userManager.GetUserAsync(user);
+            if (nauktionUser == null)
+                return false;
+            return await userManager.IsInRoleAsync(nauktionUser, role.ToString());
         }
 
         public static async Task<bool> IsInRoleAsync(this UserManager<NauktionUser> userManager, NauktionUser user, NauktionRoles role)
