@@ -38,7 +38,7 @@ namespace Nauktion.Controllers
 
             var model = new AuktionBudViewModel(auktion, new List<BudModel>());
 
-            return View("Auktion", model);
+            return View(model);
         }
     }
 }
