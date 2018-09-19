@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Nauktion.Models;
@@ -21,6 +23,30 @@ namespace Nauktion.Helpers
             }
 
             return viewModels;
+        }
+
+        [NotNull, ItemNotNull]
+        public static async Task<AuktionBudPageinatedViewModel> ListAuktionBudsPaginatedAsync(this IAuktionService service, int page = 1, bool includeClosed = false)
+        {
+            List<AuktionModel> auktions = await service.ListAuktionsAsync(includeClosed);
+
+            var viewModel = new AuktionBudPageinatedViewModel
+            {
+                NumOfPages = MathHelpers.DivCeil(auktions.Count, AuktionBudPageinatedViewModel.MODELS_PER_PAGE),
+                TotalModelCount = auktions.Count
+            };
+
+            viewModel.Page = page = Math.Clamp(page, 1, viewModel.NumOfPages);
+
+            foreach (AuktionModel a in auktions
+                .Skip((page - 1) * AuktionBudPageinatedViewModel.MODELS_PER_PAGE)
+                .Take(AuktionBudPageinatedViewModel.MODELS_PER_PAGE))
+            {
+                List<BudModel> buds = await service.ListBudsAsync(a.AuktionID);
+                viewModel.Models.Add(new AuktionBudViewModel(a, buds));
+            }
+
+            return viewModel;
         }
 
         [NotNull, ItemCanBeNull]

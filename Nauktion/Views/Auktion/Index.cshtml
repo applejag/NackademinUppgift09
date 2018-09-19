@@ -1,13 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject UserManager<NauktionUser> UserManager
-@model List<AuktionBudViewModel>
+@model AuktionBudPageinatedViewModel
 
 @{
     ViewData["Title"] = "Auktioner";
     ViewData["Message"] = "Välj en auktion för att börja buda.";
 
-    var list1 = Model.EveryOther();
-    var list2 = Model.Skip(1).EveryOther();
+    var list1 = Model.Models.EveryOther();
+    var list2 = Model.Models.Skip(1).EveryOther();
 }
 
 <article class="row">
@@ -25,12 +25,36 @@
         }
     </div>
 </article>
-@if (Model.Count == 0)
+@if (Model.Models.Count == 0)
 {
     <article>
         <i class="text-muted">(Det finns inga öppna auktioner just nu. Titta förbi senare!)</i>
     </article>
 }
+
+<nav>
+    <ul class="pager">
+        @if (Model.Page > 1)
+        {
+            <li><a asp-action="Index" asp-route-page="@(Model.Page - 1)">Nyare</a></li>
+        }
+        else
+        {
+            <li class="disabled"><a href="javascript:void(0);" title="Du är på första sidan." data-toggle="tooltip">Nyare</a></li>
+        }
+        
+        <li class="text-muted" title="Visar auktioner @(Model.StartIndex + 1)&ndash;@(Model.StopIndex + 1), utav totalt @Model.TotalModelCount st" data-toggle="tooltip">Sida @Model.Page av @Model.NumOfPages</li>
+
+        @if (Model.Page < Model.NumOfPages)
+        {
+            <li><a asp-action="Index" asp-route-page="@(Model.Page + 1)">Äldre</a></li>
+        }
+        else
+        {
+            <li class="disabled"><a href="javascript:void(0);" title="Du är på sista sidan." data-toggle="tooltip">Äldre</a></li>
+        }
+    </ul>
+</nav>
 
 @section Scripts
     {

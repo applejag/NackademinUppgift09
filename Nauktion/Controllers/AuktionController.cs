@@ -24,9 +24,16 @@ namespace Nauktion.Controllers
             _userManager = userManager;
         }
         
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            List<AuktionBudViewModel> model = await _service.ListAuktionBudsAsync();
+            AuktionBudPageinatedViewModel model = await _service.ListAuktionBudsPaginatedAsync(page ?? 1);
+
+            if (page.HasValue && (page < 1 || page > model.NumOfPages))
+            {
+                if (page.Value == 1)
+                    return RedirectToAction("View");
+                return RedirectToAction("View", new {page = Math.Clamp(page.Value, 1, model.NumOfPages)});
+            }
 
             return View(model);
         }
