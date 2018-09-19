@@ -28,5 +28,12 @@ namespace Nauktion.Services
         {
             return await _repository.GetAuktionAsync(id);
         }
+
+        public async Task<List<BudModel>> ListBudsAsync(int auktionID)
+        {
+            List<BudModel> list = await _repository.ListBudsAsync(auktionID);
+            return list.OrderByDescending(b => b.Summa)
+                .ToList();
+        }
     }
 }

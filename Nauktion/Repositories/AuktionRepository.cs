@@ -26,20 +26,29 @@ namespace Nauktion.Repositories
             _client?.Dispose();
         }
 
-        public async Task<List<AuktionModel>> ListAuktionsAsync()
+        public async Task<List<BudModel>> ListBudsAsync(int auktionID)
         {
-            int gruppkod = Gruppkod;
-            HttpResponseMessage response = await _client.GetAsync($"Auktion/{gruppkod}");
+            HttpResponseMessage response = await _client.GetAsync($"bud/{Gruppkod}/{auktionID}");
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsAsync<List<AuktionModel>>();
+            return await response.Content.ReadAsAsync<List<BudModel>>()
+                ?? new List<BudModel>();
+        }
+
+        public async Task<List<AuktionModel>> ListAuktionsAsync()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"Auktion/{Gruppkod}");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<AuktionModel>>()
+                ?? new List<AuktionModel>();
         }
 
         public async Task<AuktionModel> GetAuktionAsync(int id)
         {
-            int gruppkod = Gruppkod;
-            HttpResponseMessage response = await _client.GetAsync($"Auktion/{gruppkod}/{id}");
+            HttpResponseMessage response = await _client.GetAsync($"Auktion/{Gruppkod}/{id}");
 
             response.EnsureSuccessStatusCode();
 

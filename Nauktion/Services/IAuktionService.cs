@@ -12,5 +12,8 @@ namespace Nauktion.Services
 
         [NotNull, ItemCanBeNull, Pure]
         Task<AuktionModel> GetAuktionAsync(int id);
+
+        [NotNull, ItemNotNull, Pure]
+        Task<List<BudModel>> ListBudsAsync(int auktionID);
     }
 }
