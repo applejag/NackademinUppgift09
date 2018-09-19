@@ -16,17 +16,17 @@ namespace Nauktion.Services
             _repository = repository;
         }
 
-        public async Task<List<AuktionModel>> ListAuktions(bool includeClosed = false)
+        public async Task<List<AuktionModel>> ListAuktionsAsync(bool includeClosed = false)
         {
-            List<AuktionModel> list = await _repository.ListAuktions();
+            List<AuktionModel> list = await _repository.ListAuktionsAsync();
             return list.WhereIf(!includeClosed, a => !a.IsClosed)
                 .OrderBy(a => a.StartDatum)
                 .ToList();
         }
 
-        public async Task<AuktionModel> GetAuktion(int id)
+        public async Task<AuktionModel> GetAuktionAsync(int id)
         {
-            return await _repository.GetAuktion(id);
+            return await _repository.GetAuktionAsync(id);
         }
     }
 }

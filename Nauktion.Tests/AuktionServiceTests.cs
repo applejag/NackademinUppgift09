@@ -20,12 +20,12 @@ namespace Nauktion.Tests
             var service = new AuktionService(mockRepo.Object);
 
             var model = new AuktionModel();
-            mockRepo.Setup(t => t.GetAuktion(It.IsAny<int>()))
+            mockRepo.Setup(t => t.GetAuktionAsync(It.IsAny<int>()))
                 .ReturnsAsync(model)
                 .Verifiable();
 
             // Act
-            AuktionModel result = service.GetAuktion(1).Result;
+            AuktionModel result = service.GetAuktionAsync(1).Result;
 
             // Assert
             Assert.AreSame(model, result);
@@ -44,12 +44,12 @@ namespace Nauktion.Tests
                 .Where(a => !a.IsClosed)
                 .ToList();
 
-            mockRepo.Setup(t => t.ListAuktions())
+            mockRepo.Setup(t => t.ListAuktionsAsync())
                 .ReturnsAsync(modelList)
                 .Verifiable();
 
             // Act
-            List<AuktionModel> result = service.ListAuktions(includeClosed: false).Result;
+            List<AuktionModel> result = service.ListAuktionsAsync(includeClosed: false).Result;
 
             // Assert
             mockRepo.Verify();
@@ -68,12 +68,12 @@ namespace Nauktion.Tests
                 .OrderBy(a => a.StartDatum)
                 .ToList();
 
-            mockRepo.Setup(t => t.ListAuktions())
+            mockRepo.Setup(t => t.ListAuktionsAsync())
                 .ReturnsAsync(modelList)
                 .Verifiable();
 
             // Act
-            List<AuktionModel> result = service.ListAuktions(includeClosed: true).Result;
+            List<AuktionModel> result = service.ListAuktionsAsync(includeClosed: true).Result;
 
             // Assert
             mockRepo.Verify();
