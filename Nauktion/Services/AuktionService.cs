@@ -29,9 +29,9 @@ namespace Nauktion.Services
                 .ToList();
         }
 
-        public async Task<AuktionModel> GetAuktionAsync(int id)
+        public async Task<AuktionModel> GetAuktionAsync(int auktionID)
         {
-            return await _repository.GetAuktionAsync(id);
+            return await _repository.GetAuktionAsync(auktionID);
         }
 
         public async Task<List<BudModel>> ListBudsAsync(int auktionID)
@@ -41,12 +41,12 @@ namespace Nauktion.Services
                 .ToList();
         }
 
-        public async Task CreateBudAsync(int auktionID, int summa, NauktionUser budgivare)
+        public async Task CreateBudAsync(BiddingViewModel model, NauktionUser budgivare)
         {
             await _repository.CreateBudAsync(new BudModel
             {
-                AuktionID = auktionID,
-                Summa = summa,
+                AuktionID = model.AuktionID,
+                Summa = model.Summa,
                 Budgivare = budgivare.Id
             });
         }
@@ -80,6 +80,40 @@ namespace Nauktion.Services
             }
 
             return null;
+        }
+
+        public async Task CreateAuktionAsync(AuktionViewModel model, NauktionUser skapare)
+        {
+            await _repository.CreateAuktionAsync(new AuktionModel
+            {
+                Titel = model.Titel,
+                Beskrivning = model.Beskrivning,
+                StartDatum = model.StartDatum,
+                SlutDatum = model.SlutDatum,
+                Gruppkod = _repository.Gruppkod,
+                Utropspris = model.Utropspris,
+                SkapadAv = skapare.Id
+            });
+        }
+
+        public async Task AlterAuktionAsync(AuktionViewModel model, NauktionUser skapare)
+        {
+            await _repository.AlterAuktionAsync(new AuktionModel
+            {
+                AuktionID = model.AuktionID,
+                Titel = model.Titel,
+                Beskrivning = model.Beskrivning,
+                StartDatum = model.StartDatum,
+                SlutDatum = model.SlutDatum,
+                Gruppkod = _repository.Gruppkod,
+                Utropspris = model.Utropspris,
+                SkapadAv = skapare.Id
+            });
+        }
+
+        public async Task DeleteAuktionAsync(int auktionID)
+        {
+            await _repository.DeleteAuktionAsync(auktionID);
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Nauktion.Repositories
 {
     public class AuktionRepository : IAuktionRepository
     {
-        [NotNull]
         public Uri BaseAddress { get; } = new Uri(@"http://nackowskis.azurewebsites.net/api/");
 
         public int Gruppkod { get; } = 1;
@@ -50,6 +49,50 @@ namespace Nauktion.Repositories
             response.EnsureSuccessStatusCode();
         }
 
+        public async Task CreateAuktionAsync(AuktionModel model)
+        {
+            var formdata = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                [nameof(model.Titel)] = model.Titel,
+                [nameof(model.Beskrivning)] = model.Beskrivning,
+                [nameof(model.StartDatum)] = model.StartDatum.ToString("u"),
+                [nameof(model.SlutDatum)] = model.SlutDatum.ToString("u"),
+                [nameof(model.Utropspris)] = model.Utropspris?.ToString() ?? "0",
+                [nameof(model.Gruppkod)] = model.Gruppkod.ToString(),
+                [nameof(model.SkapadAv)] = model.SkapadAv
+            });
+
+            HttpResponseMessage response = await _client.PostAsync("Auktion", formdata);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task AlterAuktionAsync(AuktionModel model)
+        {
+            var formdata = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                [nameof(model.AuktionID)] = model.AuktionID.ToString(),
+                [nameof(model.Titel)] = model.Titel,
+                [nameof(model.Beskrivning)] = model.Beskrivning,
+                [nameof(model.StartDatum)] = model.StartDatum.ToString("u"),
+                [nameof(model.SlutDatum)] = model.SlutDatum.ToString("u"),
+                [nameof(model.Utropspris)] = model.Utropspris?.ToString() ?? "0",
+                [nameof(model.Gruppkod)] = model.Gruppkod.ToString(),
+                [nameof(model.SkapadAv)] = model.SkapadAv
+            });
+
+            HttpResponseMessage response = await _client.PutAsync("Auktion", formdata);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteAuktionAsync(int auktionID)
+        {
+            HttpResponseMessage response = await _client.DeleteAsync($"Auktion/{Gruppkod}/{auktionID}");
+
+            response.EnsureSuccessStatusCode();
+        }
+
         public async Task<List<AuktionModel>> ListAuktionsAsync()
         {
             HttpResponseMessage response = await _client.GetAsync($"Auktion/{Gruppkod}");
@@ -60,9 +103,9 @@ namespace Nauktion.Repositories
                 ?? new List<AuktionModel>();
         }
 
-        public async Task<AuktionModel> GetAuktionAsync(int id)
+        public async Task<AuktionModel> GetAuktionAsync(int auktionID)
         {
-            HttpResponseMessage response = await _client.GetAsync($"Auktion/{Gruppkod}/{id}");
+            HttpResponseMessage response = await _client.GetAsync($"Auktion/{Gruppkod}/{auktionID}");
 
             response.EnsureSuccessStatusCode();
 

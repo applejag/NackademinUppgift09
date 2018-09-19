@@ -71,7 +71,7 @@ namespace Nauktion.Controllers
             }
 
             // Valid! Let's create that bid!
-            await _service.CreateBudAsync(bid.AuktionID, bid.Summa, currentUser);
+            await _service.CreateBudAsync(bid, currentUser);
 
             TempData["BidSuccess"] = true;
             return RedirectToAction("View", new {id = bid.AuktionID});
