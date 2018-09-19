@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Nauktion.Models;
@@ -32,23 +33,51 @@ namespace Nauktion.Tests
         }
 
         [TestMethod]
-        public void ListAuktions_GoesThroughService()
+        public void ListAuktions_FilterOutClosed()
         {
             // Arrange
             var mockRepo = new Mock<IAuktionRepository>();
             var service = new AuktionService(mockRepo.Object);
 
             List<AuktionModel> modelList = GetMeSomeAuktions();
+            List<AuktionModel> expected = modelList
+                .Where(a => !a.IsClosed)
+                .ToList();
+
             mockRepo.Setup(t => t.ListAuktions())
                 .ReturnsAsync(modelList)
                 .Verifiable();
 
             // Act
-            List<AuktionModel> result = service.ListAuktions().Result;
+            List<AuktionModel> result = service.ListAuktions(includeClosed: false).Result;
 
             // Assert
-            CollectionAssert.AreEqual(modelList, result);
             mockRepo.Verify();
+            CollectionAssert.AreEquivalent(expected, result);
+        }
+
+        [TestMethod]
+        public void ListAuktions_OrderByDate()
+        {
+            // Arrange
+            var mockRepo = new Mock<IAuktionRepository>();
+            var service = new AuktionService(mockRepo.Object);
+
+            List<AuktionModel> modelList = GetMeSomeAuktions();
+            List<AuktionModel> expected = modelList
+                .OrderBy(a => a.StartDatum)
+                .ToList();
+
+            mockRepo.Setup(t => t.ListAuktions())
+                .ReturnsAsync(modelList)
+                .Verifiable();
+
+            // Act
+            List<AuktionModel> result = service.ListAuktions(includeClosed: true).Result;
+
+            // Assert
+            mockRepo.Verify();
+            CollectionAssert.AreEqual(expected, result);
         }
 
         private static List<AuktionModel> GetMeSomeAuktions() => new List<AuktionModel>
@@ -57,6 +86,7 @@ namespace Nauktion.Tests
             new AuktionModel {AuktionID = 2, Titel = "Second", Beskrivning = "Second desc", Gruppkod = 1, StartDatum = DateTime.Today.AddDays(20), SlutDatum = DateTime.Today.AddDays(100), SkapadAv = "me2", Utropspris = 120},
             new AuktionModel {AuktionID = 3, Titel = "Third", Beskrivning = "Third desc", Gruppkod = 1, StartDatum = DateTime.Today.AddMonths(-1), SlutDatum = DateTime.Today.AddMonths(2), SkapadAv = "me3", Utropspris = 200},
             new AuktionModel {AuktionID = 4, Titel = "Forth", Beskrivning = "Forth desc", Gruppkod = 1, StartDatum = DateTime.Today.AddDays(1), SlutDatum = DateTime.Today.AddMonths(1), SkapadAv = "me4", Utropspris = 80},
+            new AuktionModel {AuktionID = 5, Titel = "Fifth", Beskrivning = "This one has ended", Gruppkod = 1, StartDatum = DateTime.Today.AddMonths(-3), SlutDatum = DateTime.Today.AddMonths(-1), SkapadAv = "me4", Utropspris = 25},
         };
     }
 }

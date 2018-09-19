@@ -8,7 +8,7 @@ namespace Nauktion.Services
     public interface IAuktionService
     {
         [NotNull, ItemNotNull, Pure]
-        Task<List<AuktionModel>> ListAuktions();
+        Task<List<AuktionModel>> ListAuktions(bool includeClosed = false);
 
         [NotNull, ItemCanBeNull, Pure]
         Task<AuktionModel> GetAuktion(int id);

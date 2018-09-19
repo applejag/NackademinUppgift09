@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Nauktion.Helpers;
 using Nauktion.Models;
 using Nauktion.Repositories;
 
@@ -14,9 +16,12 @@ namespace Nauktion.Services
             _repository = repository;
         }
 
-        public async Task<List<AuktionModel>> ListAuktions()
+        public async Task<List<AuktionModel>> ListAuktions(bool includeClosed = false)
         {
-            return await _repository.ListAuktions();
+            List<AuktionModel> list = await _repository.ListAuktions();
+            return list.WhereIf(!includeClosed, a => !a.IsClosed)
+                .OrderBy(a => a.StartDatum)
+                .ToList();
         }
 
         public async Task<AuktionModel> GetAuktion(int id)
