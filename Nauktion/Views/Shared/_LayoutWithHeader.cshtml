@@ -1,88 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<NauktionUser> SignInManager
-<!DOCTYPE html>
-<html lang="sv-SE">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@(string.IsNullOrWhiteSpace(ViewData["Title"] as string) ? "Nauktion" : ViewData["Title"] + " - Nauktion")</title>
+@{
+    Layout = "_LayoutWithoutHeader";
+}
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
-</head>
-<body>
-    <partial name="_CookieConsentPartial" />
+<h2>@ViewData["Title"]</h2>
+<div>
+    @if (!string.IsNullOrWhiteSpace(ViewData["Message"] as string))
+    {
+        <h4>@ViewData["Message"]</h4>
+    }
+    <hr/>
+    <div>
+        @RenderBody()
+    </div>
+</div>
 
-    <div class="container">
-        <div class="header clearfix">
-            <nav>
-                <partial name="_LoginPartial" />
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation"><a asp-controller="Home" asp-action="About">Info</a></li>
-                    <li role="presentation"><a asp-controller="Home" asp-action="Contact">Kontakta oss</a></li>
-                </ul>
-            </nav>
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <a class="navbar-brand" asp-controller="Auktion" asp-action="Index">Nauktion</a>
-            }
-            else
-            {
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Nauktion</a>
-            }
-        </div>
-
-        <div class="marketing">
-            <h2>@ViewData["Title"]</h2>
-            <div>
-                @if (!string.IsNullOrWhiteSpace(ViewData["Message"] as string))
-                {
-                    <h4>@ViewData["Message"]</h4>
-                }
-                <hr/>
-                <div>
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
-
-        <footer class="footer">
-            <p>&copy; @DateTime.Today.Year Nauktion</p>
-            <p>Powered by <a href="http://nackowskis.azurewebsites.net/" target="_blank">Nackowskis Auktion API &copy; 2018</a></p>
-        </footer>
-
-    </div> <!-- /container -->
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
-
+@section Scripts
+{
     @RenderSection("Scripts", required: false)
-</body>
-</html>
+}

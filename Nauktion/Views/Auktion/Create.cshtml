@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<NauktionUser> UserManager
+@model AuktionViewModel
+@{
+    ViewData["Title"] = "Ny auktion";
+    ViewData["Message"] = "Skapa ny auktion.";
+}
+
+<form asp-controller="Auktion" asp-action="Create" method="post">
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label asp-for="Titel"></label>
+            <input class="form-control" asp-for="Titel"/>
+            <span class="text-danger" asp-validation-for="Titel"></span>
+        </div>
+        <div class="form-group col-sm-6">
+            <label asp-for="Utropspris"></label>
+            <input class="form-control" asp-for="Utropspris"/>
+            <span class="text-danger" asp-validation-for="Utropspris"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Beskrivning"></label>
+        <textarea class="form-control" asp-for="Beskrivning" rows="7"></textarea>
+        <span class="text-danger" asp-validation-for="Beskrivning"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SlutDatum"></label>
+        <input class="form-control" asp-for="SlutDatum"/>
+        <span class="text-danger" asp-validation-for="SlutDatum"></span>
+    </div>
+    <div class="form-group">
+        <p class="help-block">
+            Skapad av: @((await UserManager.GetUserAsync(User)).UserName)
+        </p>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Skapa auktion</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}

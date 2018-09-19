@@ -26,7 +26,7 @@ namespace Nauktion.Services
         Task CreateAuktionAsync([NotNull] AuktionViewModel model, [NotNull] NauktionUser skapare);
 
         [NotNull]
-        Task AlterAuktionAsync([NotNull] AuktionViewModel model, [NotNull] NauktionUser skapare);
+        Task AlterAuktionAsync([NotNull] AuktionViewModel model);
 
         [NotNull]
         Task DeleteAuktionAsync(int auktionID);

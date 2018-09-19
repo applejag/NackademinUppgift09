@@ -39,5 +39,15 @@ namespace Nauktion.Controllers
 
             return new JsonResult(error);
         }
+
+        [AcceptVerbs("Get", "Post")]
+        [Route(nameof(VerifySlutDatum))]
+        public IActionResult VerifySlutDatum(DateTime SlutDatum)
+        {
+            if ((SlutDatum - DateTime.Now).TotalHours < 12)
+                return new JsonResult("Avslutande datum måste sättas minst 12 timmar från nu.");
+
+            return new JsonResult(true);
+        }
     }
 }

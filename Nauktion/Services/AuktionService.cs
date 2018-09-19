@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -88,7 +89,7 @@ namespace Nauktion.Services
             {
                 Titel = model.Titel,
                 Beskrivning = model.Beskrivning,
-                StartDatum = model.StartDatum,
+                StartDatum = DateTime.Now,
                 SlutDatum = model.SlutDatum,
                 Gruppkod = _repository.Gruppkod,
                 Utropspris = model.Utropspris,
@@ -96,19 +97,18 @@ namespace Nauktion.Services
             });
         }
 
-        public async Task AlterAuktionAsync(AuktionViewModel model, NauktionUser skapare)
+        public async Task AlterAuktionAsync(AuktionViewModel model)
         {
-            await _repository.AlterAuktionAsync(new AuktionModel
-            {
-                AuktionID = model.AuktionID,
-                Titel = model.Titel,
-                Beskrivning = model.Beskrivning,
-                StartDatum = model.StartDatum,
-                SlutDatum = model.SlutDatum,
-                Gruppkod = _repository.Gruppkod,
-                Utropspris = model.Utropspris,
-                SkapadAv = skapare.Id
-            });
+            AuktionModel previous = await GetAuktionAsync(model.AuktionID);
+            if (previous is null)
+                throw new NullReferenceException($"Auktion #{model.AuktionID} finns inte i databasen!");
+
+            previous.Titel = model.Titel;
+            previous.Beskrivning = model.Beskrivning;
+            previous.SlutDatum = model.SlutDatum;
+            previous.Utropspris = model.Utropspris;
+
+            await _repository.AlterAuktionAsync(previous);
         }
 
         public async Task DeleteAuktionAsync(int auktionID)

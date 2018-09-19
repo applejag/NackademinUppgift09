@@ -76,5 +76,22 @@ namespace Nauktion.Controllers
             TempData["BidSuccess"] = true;
             return RedirectToAction("View", new {id = bid.AuktionID});
         }
+
+        [HttpGet]
+        [AuthorizeRole(NauktionRoles.Admin)]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AuthorizeRole(NauktionRoles.Admin)]
+        public async Task<IActionResult> Create(AuktionViewModel model)
+        {
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+            await _service.CreateAuktionAsync(model, currentUser);
+            
+            return View(model);
+        }
     }
 }

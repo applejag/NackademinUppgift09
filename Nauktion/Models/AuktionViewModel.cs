@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Nauktion.Models
 {
     public class AuktionViewModel
     {
         public int AuktionID { get; set; }
+        public DateTime StartDatum { get; set; }
 
         [Required(ErrorMessage = "Du måste ange titeln.")]
         [StringLength(50, MinimumLength = 1, ErrorMessage = "Titeln måste vara mellan 1 och 50 karaktärer.")]
@@ -14,10 +16,8 @@ namespace Nauktion.Models
         [Required(ErrorMessage = "Du måste ange en beskrivning.")]
         public string Beskrivning { get; set; }
 
-        [Required(ErrorMessage = "Du måste ange ett start datum.")]
-        public DateTime StartDatum { get; set; }
-
         [Required(ErrorMessage = "Du måste ange ett avslutande datum.")]
+        [Remote(controller: "AuktionAPI", action: "VerifySlutDatum")]
         public DateTime SlutDatum { get; set; }
 
         [Required(ErrorMessage = "Du måste ange ett utropspris.")]
