@@ -9,20 +9,29 @@
         ? null : await UserManager.FindByIdAsync(Model.HighestBid.Budgivare);
 
     bool youWon = (await UserManager.GetUserAsync(User)).Id == winner?.Id;
-    bool justBidded = TempData["JustBidded"] is true;
+    bool justBidded = TempData["BidSuccess"] is true;
+
+    BiddingViewModel bidding = ViewData["BidModel"] as BiddingViewModel
+        ?? new BiddingViewModel
+        {
+            AuktionID = Model.AuktionID,
+            Summa = Model.MaxedPrice * 10 / 10 + 10
+        };
+
+    if (Model.IsClosed)
+    {
+        bidding.Errors.Add($"Denna auktion är stängd! Det går inte längre att buda på denna auktion då den stängdes {Model.TimeUntilEndFormatted}.");
+    }
+    else if (youWon)
+    {
+        bidding.Errors.Add("Ditt bud är det ledande just nu! Du kan inte buda mer för nuläget.");
+    }
 
     string authorName = author?.UserName ?? "<not found>";
     string winnerName = winner?.UserName ?? "<not found>";
 
     ViewData["Title"] = Model.Titel;
     ViewData["Message"] = $"Auktion skapad av {authorName}";
-
-    var bidding = new BiddingViewModel
-    {
-        AuktionID = Model.AuktionID,
-        Disabled = youWon,
-        Summa = Model.MaxedPrice * 10 / 10 + 10
-    };
 }
 
 
@@ -61,16 +70,7 @@
             Antal bud: @Model.Bids.Count st
         </p>
         <hr/>
-        @if (Model.IsClosed)
-        {
-            <div class="alert alert-danger">
-                <strong>Denna auktion är stängd!</strong> Det går inte längre att buda på denna auktion då den stängdes @Model.TimeUntilEndFormatted.
-            </div>
-        }
-        else
-        {
-            <partial name="_AuktionBiddingPartialView" model="@bidding"/>
-        }
+        <partial name="_AuktionBiddingPartialView" model="@bidding" view-data="@ViewData"/>
     </div>
     <div class="col-sm-6">
         <div>

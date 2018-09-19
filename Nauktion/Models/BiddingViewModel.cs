@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,6 @@ namespace Nauktion.Models
         public int Summa { get; set; }
 
         [NotMapped]
-        public bool Disabled { get; set; }
+        public List<string> Errors { get; set; } = new List<string>();
     }
 }
