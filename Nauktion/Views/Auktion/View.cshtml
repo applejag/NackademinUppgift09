@@ -27,6 +27,9 @@
 
     ViewData["Title"] = Model.Titel;
     ViewData["Message"] = $"Auktion skapad av {authorName}";
+    
+    bool itsmine = await UserManager.IsInRoleAsync(User, NauktionRoles.Admin)
+                   && Model.SkapadAv == UserManager.GetUserId(User);
 }
 
 
@@ -73,15 +76,23 @@
         <div>
             @Model.Beskrivning
         </div>
-        <hr/>
+        <hr />
         <p class="text-muted">
-            @(Model.IsClosed ? "Avslutades" : "Avslutas") @Model.TimeUntilEndFormatted<br/>
+            @(Model.IsClosed ? "Avslutades" : "Avslutas") @Model.TimeUntilEndFormatted<br />
             @Model.SlutDatum.ToString("f")
         </p>
         <p class="text-muted">
-            @(Model.IsClosed ? "Öppnades" : "Öppnas") @Model.TimeSinceStartFormatted<br/>
+            @(Model.IsClosed ? "Öppnades" : "Öppnas") @Model.TimeSinceStartFormatted<br />
             @Model.StartDatum.ToString("f")
         </p>
+        @if (itsmine)
+        {
+            <p>
+                <a class="" asp-controller="Auktion" asp-action="Alter" asp-route-id="@Model.AuktionID">
+                    Redigera auktion...
+                </a>
+            </p>
+        }
     </div>
 </div>
 

@@ -7,7 +7,6 @@ namespace Nauktion.Models
     public class AuktionViewModel
     {
         public int AuktionID { get; set; }
-        public DateTime StartDatum { get; set; }
 
         [Required(ErrorMessage = "Du måste ange titeln.")]
         [StringLength(50, MinimumLength = 1, ErrorMessage = "Titeln måste vara mellan 1 och 50 karaktärer.")]

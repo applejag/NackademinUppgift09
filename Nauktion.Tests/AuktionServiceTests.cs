@@ -110,14 +110,15 @@ namespace Nauktion.Tests
             var mockRepo = new Mock<IAuktionRepository>();
             var service = new AuktionService(mockRepo.Object, null);
             BudModel obj = null;
+            var bud = new BiddingViewModel {AuktionID = 1, Summa = 2};
             var user = new NauktionUser {Id = "abcdef"};
 
             mockRepo.Setup(t => t.CreateBudAsync(It.IsAny<BudModel>()))
                 .Callback((BudModel o) => obj = o)
                 .Returns(Task.CompletedTask).Verifiable();
-
+            
             // Act
-            service.CreateBudAsync(1, 2, user).GetAwaiter().GetResult();
+            service.CreateBudAsync(bud, user).GetAwaiter().GetResult();
 
             // Assert
             Assert.IsNotNull(obj);

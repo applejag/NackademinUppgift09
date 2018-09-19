@@ -1,0 +1,50 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<NauktionUser> UserManager
+@model AuktionViewModel
+@{
+    ViewData["Title"] = "Redigera auktion";
+    ViewData["Message"] = "Ändra på din auktion " + Model.Titel;
+}
+
+<form asp-controller="Auktion" asp-action="Alter" method="post">
+    <input asp-for="AuktionID" type="hidden"/>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label asp-for="Titel"></label>
+            <input class="form-control" asp-for="Titel"/>
+            <span class="text-danger" asp-validation-for="Titel"></span>
+        </div>
+        <div class="form-group col-sm-6">
+            <label asp-for="Utropspris"></label>
+            <div class="input-group">
+                <span class="input-group-addon">@RegionInfo.CurrentRegion.CurrencySymbol</span>
+                <input class="form-control" asp-for="Utropspris"/>
+            </div>
+            <span class="text-danger" asp-validation-for="Utropspris"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Beskrivning"></label>
+        <textarea class="form-control" asp-for="Beskrivning" rows="7"></textarea>
+        <span class="text-danger" asp-validation-for="Beskrivning"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SlutDatum"></label>
+        <input class="form-control" asp-for="SlutDatum"/>
+        <span class="text-danger" asp-validation-for="SlutDatum"></span>
+    </div>
+    <div class="form-group">
+        <p class="help-block">
+            Skapad av: @((await UserManager.GetUserAsync(User)).UserName)
+        </p>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Spara auktion</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}

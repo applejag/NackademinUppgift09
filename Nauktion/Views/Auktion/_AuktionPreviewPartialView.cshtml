@@ -1,6 +1,12 @@
-﻿@model AuktionBudViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@model AuktionBudViewModel
+@inject UserManager<NauktionUser> UserManager
+@{
+    bool itsmine = await UserManager.IsInRoleAsync(User, NauktionRoles.Admin) 
+                   && Model.SkapadAv == UserManager.GetUserId(User);
+}
 
-<div class="panel panel-info">
+<div class="panel @(itsmine ? "panel-warning" : "panel-info")">
     <div class="panel-heading">
         <h3 class="panel-title">
             <a asp-action="View" asp-route-id="@Model.AuktionID">
@@ -12,6 +18,14 @@
         </h3>
     </div>
     <div class="panel-body">
+        @if (itsmine)
+        {
+            <p>
+                <a class="" asp-controller="Auktion" asp-action="Alter" asp-route-id="@Model.AuktionID">
+                    Redigera auktion...
+                </a>
+            </p>
+        }
         @Model.Beskrivning
     </div>
     <div class="panel-footer">

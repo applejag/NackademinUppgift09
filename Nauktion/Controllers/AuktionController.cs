@@ -88,9 +88,59 @@ namespace Nauktion.Controllers
         [AuthorizeRole(NauktionRoles.Admin)]
         public async Task<IActionResult> Create(AuktionViewModel model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+
             NauktionUser currentUser = await _userManager.GetUserAsync(User);
             await _service.CreateAuktionAsync(model, currentUser);
-            
+
+            TempData["Message"] = $"Din auktion \"{model.Titel}\" har skapats!";
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [AuthorizeRole(NauktionRoles.Admin)]
+        public async Task<IActionResult> Alter(int id)
+        {
+            AuktionModel auktionModel = await _service.GetAuktionAsync(id);
+            if (auktionModel is null)
+                return NotFound();
+
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+
+            if (auktionModel.SkapadAv != currentUser.Id)
+                return LocalRedirect("/Identity/Account/AccessDenied");
+
+            var model = new AuktionViewModel
+            {
+                AuktionID = auktionModel.AuktionID,
+                Titel = auktionModel.Titel,
+                Beskrivning = auktionModel.Beskrivning,
+                SlutDatum = auktionModel.SlutDatum,
+                Utropspris = auktionModel.Utropspris ?? 0
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AuthorizeRole(NauktionRoles.Admin)]
+        public async Task<IActionResult> Alter(AuktionViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            AuktionModel auktionModel = await _service.GetAuktionAsync(model.AuktionID);
+            if (auktionModel is null)
+                return NotFound();
+
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+            if (auktionModel.SkapadAv != currentUser.Id)
+                return LocalRedirect("/Identity/Account/AccessDenied");
+
+            await _service.AlterAuktionAsync(model);
+
+            TempData["Message"] = $"Dina ändringar till auktionen \"{model.Titel}\" har sparats!";
             return View(model);
         }
     }
