@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nauktion.Helpers;
 using Nauktion.Models;
+using Nauktion.Services;
 
 namespace Nauktion.Controllers
 {
@@ -14,10 +15,12 @@ namespace Nauktion.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<NauktionUser> _userManager;
+        private readonly IAuktionService _service;
 
-        public AdminController(UserManager<NauktionUser> userManager)
+        public AdminController(UserManager<NauktionUser> userManager, IAuktionService service)
         {
             _userManager = userManager;
+            _service = service;
         }
 
         public IActionResult Index()
@@ -57,6 +60,118 @@ namespace Nauktion.Controllers
 
             TempData["Message"] = $"Användare \"{user.UserName}\" har blivit befodrad till Admin!";
             return RedirectToAction("Users");
+        }
+
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(AuktionViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+            await _service.CreateAuktionAsync(model, currentUser);
+
+            TempData["Message"] = $"Din auktion \"{model.Titel}\" har skapats!";
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Alter(int id)
+        {
+            AuktionModel auktionModel = await _service.GetAuktionAsync(id);
+            if (auktionModel is null)
+            {
+                TempData["Message"] = "Misslyckades med att redigera auktionen! Auktionen finns inte i databasen.";
+                return RedirectToAction("Index");
+            }
+
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+
+            if (auktionModel.SkapadAv != currentUser.Id)
+            {
+                TempData["Message"] = "Misslyckades med att redigera auktionen! Du kan inte redigera någon annans auktion.";
+                return RedirectToAction("Index");
+            }
+
+            var model = new AuktionViewModel
+            {
+                AuktionID = auktionModel.AuktionID,
+                Titel = auktionModel.Titel,
+                Beskrivning = auktionModel.Beskrivning,
+                SlutDatum = auktionModel.SlutDatum,
+                Utropspris = auktionModel.Utropspris ?? 0
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Alter(AuktionViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            AuktionModel auktionModel = await _service.GetAuktionAsync(model.AuktionID);
+            if (auktionModel is null)
+            {
+                TempData["Message"] = "Misslyckades med att redigera auktionen! Auktionen finns inte i databasen.";
+                return RedirectToAction("Index");
+            }
+
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+            if (auktionModel.SkapadAv != currentUser.Id)
+            {
+                TempData["Message"] = "Misslyckades med att redigera auktionen! Du kan inte redigera någon annans auktion.";
+                return RedirectToAction("Index");
+            }
+
+            await _service.AlterAuktionAsync(model);
+
+            TempData["Message"] = $"Dina ändringar till auktionen \"{model.Titel}\" har sparats!";
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(AuktionDeleteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Alter", new { id = model.AuktionID });
+            }
+
+            AuktionBudViewModel auktionModel = await _service.GetAuktionBudsAsync(model.AuktionID);
+            if (auktionModel is null)
+            {
+                TempData["Message"] = "Misslyckades med att ta bort auktionen! Auktionen finns inte i databasen.";
+                return RedirectToAction("Index");
+            }
+
+            NauktionUser currentUser = await _userManager.GetUserAsync(User);
+
+            if (auktionModel.SkapadAv != currentUser.Id)
+            {
+                TempData["Message"] = "Misslyckades med att ta bort auktionen! Du kan inte ta bort någon annans auktion.";
+                return RedirectToAction("Index");
+            }
+
+            if (auktionModel.Bids.Count > 0)
+            {
+                TempData["Message"] =
+                    "Misslyckades med att ta bort auktionen! Du kan inte ta bort en auktion som har blivit budad.";
+                return RedirectToAction("Index");
+            }
+
+            await _service.DeleteAuktionAsync(model.AuktionID);
+            TempData["Message"] = $"Auktionen \"{auktionModel.Titel}\" har blivit borttagen!";
+
+            return RedirectToAction("Index");
         }
     }
 }

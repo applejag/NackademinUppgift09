@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Nauktion.Helpers
+@using Nauktion.Models
 @model AuktionBudViewModel
 @inject UserManager<NauktionUser> UserManager
 @{
-    bool itsmine = await UserManager.IsInRoleAsync(User, NauktionRoles.Admin) 
+    bool itsmine = (await UserManager.IsInRoleAsync(User, NauktionRoles.Admin)) 
                    && Model.SkapadAv == UserManager.GetUserId(User);
 }
 
@@ -21,7 +23,7 @@
         @if (itsmine)
         {
             <p>
-                <a class="" asp-controller="Auktion" asp-action="Alter" asp-route-id="@Model.AuktionID">
+                <a class="" asp-controller="Admin" asp-action="Alter" asp-route-id="@Model.AuktionID">
                     Redigera auktion...
                 </a>
             </p>

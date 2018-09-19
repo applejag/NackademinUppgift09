@@ -7,7 +7,7 @@
     ViewData["Message"] = "Ändra på din auktion " + Model.Titel;
 }
 
-<form asp-controller="Auktion" asp-action="Alter" method="post">
+<form asp-controller="Admin" asp-action="Alter" method="post">
     <input asp-for="AuktionID" type="hidden"/>
     <div class="row">
         <div class="form-group col-sm-6">

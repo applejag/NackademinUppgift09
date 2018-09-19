@@ -10,14 +10,6 @@
     var list2 = Model.Skip(1).EveryOther();
 }
 
-
-@if (await UserManager.IsInRoleAsync(User, NauktionRoles.Admin))
-{
-    <p>
-        <a class="btn btn-primary center-block" asp-controller="Auktion" asp-action="Create">Skapa ny auktion <span class="label label-danger">@NauktionRoles.Admin.ToString()</span></a>
-    </p>
-}
-
 <article class="row">
     <div class="col-sm-6">
         @foreach (AuktionBudViewModel m in list1)
