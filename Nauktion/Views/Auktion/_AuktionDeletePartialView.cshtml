@@ -1,0 +1,17 @@
+﻿@model AuktionDeleteViewModel
+
+<form method="post" asp-controller="Auktion" asp-action="Delete">
+    <input asp-for="AuktionID" type="hidden" />
+    <div class="panel panel-danger">
+        <div class="panel-heading has-error">
+            <h4>Danger zone :: Ta bort auktion</h4>
+            <div class="input-group ">
+                <label class="input-group-addon" asp-for="AuktionID_Confirm">Fyll i <span class="label label-danger">@Model.AuktionID</span> för att ta bort:</label>
+                <input class="form-control danger" asp-for="AuktionID_Confirm" />
+                <span class="input-group-btn">
+                    <button class="btn btn-danger" type="submit">Ta bort auktion</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>

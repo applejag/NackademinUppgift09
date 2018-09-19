@@ -43,6 +43,10 @@
         <button type="submit" class="btn btn-primary">Spara auktion</button>
     </div>
 </form>
+<hr/>
+<div>
+    <partial name="_AuktionDeletePartialView" model="@(new AuktionDeleteViewModel{AuktionID = Model.AuktionID})"/>
+</div>
 
 @section Scripts
 {
