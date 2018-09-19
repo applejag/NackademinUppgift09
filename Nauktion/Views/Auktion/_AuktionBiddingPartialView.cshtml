@@ -1,0 +1,24 @@
+﻿@using System.Globalization
+@model BiddingViewModel
+
+
+<form asp-controller="Auktion" asp-action="Bid" method="post">
+    <input asp-for="AuktionID" type="hidden" value="@Model.AuktionID" />
+    <h4><label asp-for="Summa">Buda på auktionen</label></h4>
+    
+    <div class="text-danger">
+        <span asp-validation-for="Summa"></span>
+        @if (Model.Disabled)
+        {
+        <span><strong>Ditt bud är det ledande just nu!</strong> Du kan inte buda mer för nuläget.</span>
+        }
+    </div>
+
+    <div class="input-group">
+        <span class="input-group-addon">@RegionInfo.CurrentRegion.CurrencySymbol</span>
+        <input asp-for="Summa" class="form-control" placeholder="Summa..." disabled="@(Model.Disabled ? "disabled" : "")"/>
+        <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary" disabled="@(Model.Disabled ? "disabled" : "")">Buda!</button>
+        </span>
+    </div>
+</form>

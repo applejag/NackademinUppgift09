@@ -22,8 +22,10 @@ namespace Nauktion.Models
             Gruppkod = auktion.Gruppkod;
 
             Bids = bud.Select(b => new BudViewModel(b)).ToList();
-            HighestBid = Bids.Count == 0
+            MaxedPrice = Bids.Count == 0
                 ? Utropspris : Bids.Max(b => b.Summa);
+
+            HighestBid = Bids.FirstOrDefault();
 
             DateTime now = DateTime.Now;
             TimeUntilEnd = SlutDatum - now;
@@ -43,7 +45,8 @@ namespace Nauktion.Models
         public int Gruppkod { get; }
 
         public List<BudViewModel> Bids { get; }
-        public int HighestBid { get; }
+        public int MaxedPrice { get; }
+        public BudViewModel HighestBid { get; }
 
         public TimeSpan TimeUntilEnd { get; }
         public string TimeUntilEndFormatted { get; }

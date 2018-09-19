@@ -35,5 +35,12 @@ namespace Nauktion.Controllers
 
             return View(model);
         }
+
+        public IActionResult Bid(BiddingViewModel bid)
+        {
+            TempData["JustBidded"] = true;
+
+            return RedirectToAction("View", new {id = bid.AuktionID});
+        }
     }
 }
