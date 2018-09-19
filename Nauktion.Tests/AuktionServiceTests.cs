@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Nauktion.Models;
@@ -100,6 +101,23 @@ namespace Nauktion.Tests
             // Assert
             mockRepo.Verify();
             CollectionAssert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void CreateBud_CallsRepositoryMethod()
+        {
+            // Arrange
+            var mockRepo = new Mock<IAuktionRepository>();
+            var service = new AuktionService(mockRepo.Object);
+
+            mockRepo.Setup(t => t.CreateBudAsync(null))
+                .Returns(Task.CompletedTask).Verifiable();
+
+            // Act
+            service.CreateBudAsync(null).GetAwaiter().GetResult();
+
+            // Assert
+            mockRepo.Verify();
         }
 
         private static List<BudModel> GetMeSomeBuds(int auktionId) => new List<BudModel>

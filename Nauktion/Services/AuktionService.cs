@@ -35,5 +35,10 @@ namespace Nauktion.Services
             return list.OrderByDescending(b => b.Summa)
                 .ToList();
         }
+
+        public async Task CreateBudAsync(BudModel model)
+        {
+            await _repository.CreateBudAsync(model);
+        }
     }
 }

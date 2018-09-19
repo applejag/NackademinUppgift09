@@ -16,5 +16,8 @@ namespace Nauktion.Repositories
 
         [NotNull, ItemNotNull, Pure]
         Task<List<BudModel>> ListBudsAsync(int auktionID);
+
+        [NotNull]
+        Task CreateBudAsync(BudModel model);
     }
 }

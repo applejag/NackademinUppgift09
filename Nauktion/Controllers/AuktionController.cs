@@ -68,7 +68,7 @@ namespace Nauktion.Controllers
             }
 
             // Valid! Let's create that bid!
-
+            //TODO:
             TempData["BidSuccess"] = true;
             return RedirectToAction("View", new {id = bid.AuktionID});
         }

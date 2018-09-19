@@ -36,6 +36,13 @@ namespace Nauktion.Repositories
                 ?? new List<BudModel>();
         }
 
+        public async Task CreateBudAsync(BudModel model)
+        {
+            HttpResponseMessage response = await _client.PostAsJsonAsync("bud", model);
+
+            response.EnsureSuccessStatusCode();
+        }
+
         public async Task<List<AuktionModel>> ListAuktionsAsync()
         {
             HttpResponseMessage response = await _client.GetAsync($"Auktion/{Gruppkod}");
