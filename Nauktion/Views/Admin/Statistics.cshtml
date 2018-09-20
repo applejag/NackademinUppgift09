@@ -2,11 +2,82 @@
 
 <h2>Statestik</h2>
 
+<partial name="_StatisticsFilterPartialView" model="@Model.Filter"/>
 
+<hr/>
+
+<section>
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Antal auktioner</h4>
+            <div class="stats-count label label-success">
+                @Model.Auktions.Count st
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <h4>Antal bud</h4>
+            <div class="stats-count label label-warning">
+                @Model.Auktions.Sum(a => a.Bids.Count) st
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr/>
+
+<section>
+    <h4>Auktioner</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Auktion
+                </th>
+                <th>
+                    Start
+                </th>
+                <th>
+                    Slut
+                </th>
+                <th>
+                    Högsta bud
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AuktionBudViewModel auktion in Model.Auktions)
+            {
+
+                <tr>
+                    <td>
+                        @auktion.Titel
+                    </td>
+                    <td>
+                        @auktion.StartDatum.ToString("d")
+                    </td>
+                    <td>
+                        @auktion.SlutDatum.ToString("d")
+                    </td>
+                    <td>
+                        @if (auktion.HighestBid is null)
+                        {
+                            <span class="badge">N/A</span>
+                        }
+                        else
+                        {
+                            <span class="label label-success">@auktion.HighestBid.Summa.ToString("C0")</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
 
 @section Scripts
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"
             asp-fallback-test="window.Chart"
             asp-fallback-src="~/lib/Chart.js/Chart.bundle.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 }

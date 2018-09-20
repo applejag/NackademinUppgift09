@@ -174,9 +174,25 @@ namespace Nauktion.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Statistics()
+        public async Task<IActionResult> Statistics(StatisticsFilterModel filter)
         {
-            return View();
+            string myId = _userManager.GetUserId(User);
+
+            List<AuktionBudViewModel> allAuktions = await _service.ListAuktionBudsAsync(true);
+
+            List<AuktionBudViewModel> filteredAuktions = allAuktions
+                .WhereIf(!filter.ShowMine, a => a.SkapadAv != myId)
+                .WhereIf(!filter.ShowOthers, a => a.SkapadAv == myId)
+                .Where(a => a.SlutDatum.Year == filter.TimeYear && a.SlutDatum.Month == (int)filter.TimeMonth)
+                .ToList();
+
+            var model = new StatisticsViewModel
+            {
+                Filter = filter,
+                Auktions = filteredAuktions
+            };
+
+            return View(model);
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model StatisticsFilterModel
+
+<form method="get">
+    <div asp-validation-summary="All"></div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label asp-for="TimeMonth"></label>
+                <select class="form-control" asp-for="TimeMonth" asp-items="Html.GetEnumSelectList<StatisticsFilterModel.Month>()"></select>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label asp-for="TimeYear"></label>
+                <input class="form-control" asp-for="TimeYear" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="checkbox">
+                <label asp-for="ShowMine">
+                    <input asp-for="ShowMine" />
+                    @Html.DisplayNameFor(m => m.ShowMine)
+                </label>
+            </div>
+            <div class="checkbox">
+                <label asp-for="ShowOthers">
+                    <input asp-for="ShowOthers" />
+                    @Html.DisplayNameFor(m => m.ShowOthers)
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">Filtrera</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
