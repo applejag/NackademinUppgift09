@@ -1,0 +1,41 @@
+﻿@model SearchViewModel
+
+<form asp-controller="Auktion" asp-action="Search" method="get">
+    <div asp-validation-summary="All"></div>
+
+    <div class="input-group">
+        <span class="input-group-addon">
+            <label asp-for="Query"></label>
+        </span>
+        <input class="form-control" asp-for="Query" />
+        <div class="input-group-btn">
+            <button type="submit" class="btn btn-primary">Sök</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="checkbox">
+                <label asp-for="ShowClosed">
+                    <input asp-for="ShowClosed" />
+                    @Html.DisplayNameFor(m => m.ShowClosed)
+                </label>
+            </div>
+            <div class="checkbox">
+                <label asp-for="ShowOpen">
+                    <input asp-for="ShowOpen" />
+                    @Html.DisplayNameFor(m => m.ShowOpen)
+                </label>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label asp-for="SortBy"></label>
+                <select class="form-control" asp-for="SortBy" asp-items="Html.GetEnumSelectList<SearchViewModel.SortingMode>()"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+    </div>
+</form>
+

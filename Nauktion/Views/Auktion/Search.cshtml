@@ -1,0 +1,8 @@
+﻿@model SearchResultsViewModel
+@{
+    ViewData["Title"] = "Sök";
+    ViewData["Message"] = "Hitta den auktion du letar efter.";
+}
+
+<partial name="_SearchPartialView" model="@Model.SearchModel"/>
+<partial name="_IndexPartialView" model="@Model.AuktionModel" />

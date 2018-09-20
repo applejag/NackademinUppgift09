@@ -17,7 +17,7 @@ namespace Nauktion.Services
         Task<List<BudModel>> ListBudsAsync(int auktionID);
 
         [NotNull]
-        Task CreateBudAsync(BiddingViewModel model, [NotNull] NauktionUser budgivare);
+        Task CreateBudAsync([NotNull] BiddingViewModel model, [NotNull] NauktionUser budgivare);
 
         [NotNull, ItemCanBeNull, Pure]
         Task<string> ValidateBud(int auktionID, int summa, [NotNull] NauktionUser budgivare);
