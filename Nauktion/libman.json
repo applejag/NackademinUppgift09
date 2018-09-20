@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "Chart.js@2.7.2",
+      "destination": "wwwroot/lib/Chart.js/"
+    }
+  ]
+}

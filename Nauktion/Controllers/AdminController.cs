@@ -173,5 +173,10 @@ namespace Nauktion.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Statistics()
+        {
+            return View();
+        }
     }
 }
