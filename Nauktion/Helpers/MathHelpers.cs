@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Nauktion.Helpers
 {
-    public class MathHelpers
+    public static class MathHelpers
     {
         public static int DivCeil(int a, int b)
         {
@@ -20,6 +22,21 @@ namespace Nauktion.Helpers
                 return flooredDiv + 1;
             
             return flooredDiv;
+        }
+
+        public static double Median(this IEnumerable<int> source)
+        {
+            int[] array = source.OrderBy(n => n).ToArray();
+            if (array.Length == 0)
+                return 0;
+            if (array.Length == 1)
+                return array[0];
+
+            int mid = Math.DivRem(array.Length, 2, out int rem);
+            if (rem == 0)
+                return array[mid];
+
+            return (array[mid] + array[mid - 1]) / 2d;
         }
     }
 }

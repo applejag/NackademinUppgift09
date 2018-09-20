@@ -1,29 +1,93 @@
-﻿@model StatisticsViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@model StatisticsViewModel
+@inject UserManager<NauktionUser> UserManager
+@{
+    var distinctAuthors = Model.Auktions
+        .Select(a => a.SkapadAv).Distinct();
+    var allUserModels = (await Task.WhenAll(distinctAuthors
+        .Select(async s => await UserManager.FindByIdAsync(s))))
+        .Where(u => u != null);
+    var allUsersIdLookup = allUserModels.ToDictionary(u => u?.Id);
+
+    var auktionsGroupByAuthor = Model.Auktions
+        .GroupBy(a => a.SkapadAv != null && allUsersIdLookup.ContainsKey(a.SkapadAv) ? allUsersIdLookup[a.SkapadAv] : null)
+        .ToList();
+}
 
 <h2>Statestik</h2>
 
-<partial name="_StatisticsFilterPartialView" model="@Model.Filter"/>
+<partial name="_StatisticsFilterPartialView" model="@Model.Filter" />
 
-<hr/>
+<hr />
 
-<section>
-    <div class="row">
-        <div class="col-sm-6">
-            <h4>Antal auktioner</h4>
-            <div class="stats-count label label-success">
-                @Model.Auktions.Count st
-            </div>
+<section class="row">
+    <div class="col-sm-6">
+        <h4>Antal auktioner</h4>
+        <div class="stats-count label label-success">
+            @Model.Auktions.Count st
         </div>
-        <div class="col-sm-6">
-            <h4>Antal bud</h4>
-            <div class="stats-count label label-warning">
-                @Model.Auktions.Sum(a => a.Bids.Count) st
-            </div>
+    </div>
+    <div class="col-sm-6">
+        <h4>Antal bud</h4>
+        <div class="stats-count label label-warning">
+            @Model.Auktions.Sum(a => a.Bids.Count) st
         </div>
     </div>
 </section>
 
-<hr/>
+<hr />
+
+<section class="row">
+    <div class="col-sm-12">
+        <canvas id="stat_ut_end_price" width="100" height="60" class="fullwidth"></canvas>
+    </div>
+    <div class="col-sm-4">
+        <h4>Utropspris</h4>
+        <p>
+            Medelsnitt: <span class="label label-success">@Model.Auktions.Average(a => a.Utropspris).ToString("C2")</span>
+        </p>
+        <p>
+            Median: <span class="label label-success">@Model.Auktions.Select(a => a.Utropspris).Median().ToString("C2")</span>
+        </p>
+        <p>
+            Totalt: <span class="label label-success">@Model.Auktions.Sum(a => a.Utropspris).ToString("C2")</span>
+        </p>
+    </div>
+    <div class="col-sm-4">
+        <h4>Slutpris</h4>
+        <p>
+            Medelsnitt: <span class="label label-success">@Model.Auktions.Average(a => a.MaxedPrice).ToString("C2")</span>
+        </p>
+        <p>
+            Median: <span class="label label-success">@Model.Auktions.Select(a => a.MaxedPrice).Median().ToString("C2")</span>
+        </p>
+        <p>
+            Totalt: <span class="label label-success">@Model.Auktions.Sum(a => a.MaxedPrice).ToString("C2")</span>
+        </p>
+    </div>
+    <div class="col-sm-4">
+        <h4>Prishöjning</h4>
+        <p>
+            Medelsnitt: <span class="label label-success">@Model.Auktions.Average(a => a.MaxedPrice - a.Utropspris).ToString("C2")</span>
+        </p>
+        <p>
+            Median: <span class="label label-success">@Model.Auktions.Select(a => a.MaxedPrice - a.Utropspris).Median().ToString("C2")</span>
+        </p>
+        <p>
+            Totalt: <span class="label label-success">@Model.Auktions.Sum(a => a.MaxedPrice - a.Utropspris).ToString("C2")</span>
+        </p>
+    </div>
+</section>
+
+<hr />
+
+<section class="row">
+    <div class="col-sm-12">
+        <canvas id="stat_admins_andelar" width="100" height="100" class="fullwidth"></canvas>
+    </div>
+</section>
+
+<hr />
 
 <section>
     <h4>Auktioner</h4>
@@ -75,9 +139,69 @@
 </section>
 
 @section Scripts
-{
+    {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"
             asp-fallback-test="window.Chart"
             asp-fallback-src="~/lib/Chart.js/Chart.bundle.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        (function() {
+            var ut_end_price_elem = $("#stat_ut_end_price")[0];
+            var ut_end_price_data = {
+                labels: @Html.Raw(Model.Auktions.Select(a => "#" + a.AuktionID).SerializeToJSArray()),
+                datasets: [
+                    {
+                        label: "Utropspris",
+                        backgroundColor: "orange",
+                        data: @Html.Raw(Model.Auktions.Select(a => a.Utropspris).SerializeToJSArray())
+                    },
+                    {
+                        label: "Slutpris",
+                        backgroundColor: "green",
+                        data: @Html.Raw(Model.Auktions.Select(a => a.MaxedPrice).SerializeToJSArray())
+                    }
+                ]
+            };
+            var ut_end_price_chart = new Chart(ut_end_price_elem, {
+                type: 'bar',
+                data: ut_end_price_data,
+                options: {
+                    barValueSpacing: 20,
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }
+                        ]
+                    }
+                    //responsive: true
+                }
+            });
+
+            var admins_andelar_elem = $("#stat_admins_andelar")[0];
+            var admins_andelar_data = {
+                labels: @Html.Raw(auktionsGroupByAuthor.Select(g => g.Key?.UserName ?? "<user not found>").SerializeToJSArray()),
+                datasets: [
+                    {
+                        label: "Utropspris",
+                        data: @Html.Raw(auktionsGroupByAuthor.Select(g => g.Sum(a => a.Utropspris)).SerializeToJSArray()),
+                        backgroundColor: "orange"
+                    },
+                    {
+                        label: "Slutpris",
+                        data: @Html.Raw(auktionsGroupByAuthor.Select(g => g.Sum(a => a.MaxedPrice)).SerializeToJSArray()),
+                        backgroundColor: "green"
+                    }
+                ]
+            };
+            var admins_andelar_chart = new Chart(admins_andelar_elem,
+            {
+                type: "doughnut",
+                data: admins_andelar_data
+            });
+        })();
+    </script>
 }

@@ -95,3 +95,7 @@ abbr {
     font-size: 3em;
     display: block;
 }
+.fullwidth {
+    width: 100% !important;
+    height: auto !important;
+}
