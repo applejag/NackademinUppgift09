@@ -31,6 +31,13 @@ namespace Nauktion.Areas.Identity
                     .AddDefaultUI()
                     .AddEntityFrameworkStores<NauktionContext>()
                     .AddDefaultTokenProviders();
+
+                services.AddAuthentication()
+                    .AddGoogle(googleOptions =>
+                    {
+                        googleOptions.ClientId = context.Configuration["Authentication:Google:ClientId"];
+                        googleOptions.ClientSecret = context.Configuration["Authentication:Google:ClientSecret"];
+                    });
             });
         }
     }
