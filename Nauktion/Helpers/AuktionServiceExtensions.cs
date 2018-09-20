@@ -30,16 +30,10 @@ namespace Nauktion.Helpers
         {
             List<AuktionModel> auktions = await service.ListAuktionsAsync(includeClosed);
 
-            var viewModel = new AuktionBudPageinatedViewModel
-            {
-                NumOfPages = MathHelpers.DivCeil(auktions.Count, AuktionBudPageinatedViewModel.MODELS_PER_PAGE),
-                TotalModelCount = auktions.Count
-            };
-
-            viewModel.Page = page = Math.Clamp(page, 1, viewModel.NumOfPages);
+            var viewModel = new AuktionBudPageinatedViewModel(ref page, auktions);
 
             foreach (AuktionModel a in auktions
-                .Skip((page - 1) * AuktionBudPageinatedViewModel.MODELS_PER_PAGE)
+                .Skip(viewModel.StartIndex)
                 .Take(AuktionBudPageinatedViewModel.MODELS_PER_PAGE))
             {
                 List<BudModel> buds = await service.ListBudsAsync(a.AuktionID);
@@ -47,6 +41,33 @@ namespace Nauktion.Helpers
             }
 
             return viewModel;
+        }
+
+        [NotNull, ItemNotNull]
+        public static async Task<SearchResultsViewModel> SearchAuktionBudsPaginatedAsync(this IAuktionService service, SearchViewModel search, int page = 1)
+        {
+            List<AuktionModel> auktions = (await service.ListAuktionsAsync(true))
+                .Where(search.Matches).ToList();
+
+            var viewModel = new AuktionBudPageinatedViewModel(ref page, auktions);
+
+            foreach (AuktionModel a in auktions)
+            {
+                List<BudModel> buds = await service.ListBudsAsync(a.AuktionID);
+                viewModel.Models.Add(new AuktionBudViewModel(a, buds));
+            }
+
+            viewModel.Models = viewModel.Models
+                .OrderBy(a => a, search.GetSortingComparer())
+                .Skip(viewModel.StartIndex)
+                .Take(AuktionBudPageinatedViewModel.MODELS_PER_PAGE)
+                .ToList();
+
+            return new SearchResultsViewModel
+            {
+                AuktionModel = viewModel,
+                SearchModel = search
+            };
         }
 
         [NotNull, ItemCanBeNull]

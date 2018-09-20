@@ -66,7 +66,7 @@ namespace Nauktion.Tests
 
             List<AuktionModel> modelList = GetMeSomeAuktions();
             List<AuktionModel> expected = modelList
-                .OrderBy(a => a.StartDatum)
+                .OrderByDescending(a => a.StartDatum)
                 .ToList();
 
             mockRepo.Setup(t => t.ListAuktionsAsync())

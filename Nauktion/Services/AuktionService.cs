@@ -26,7 +26,7 @@ namespace Nauktion.Services
         {
             List<AuktionModel> list = await _repository.ListAuktionsAsync();
             return list.WhereIf(!includeClosed, a => !a.IsClosed())
-                .OrderBy(a => a.StartDatum)
+                .OrderByDescending(a => a.StartDatum)
                 .ToList();
         }
 

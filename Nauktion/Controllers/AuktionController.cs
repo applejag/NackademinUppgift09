@@ -84,14 +84,9 @@ namespace Nauktion.Controllers
             return RedirectToAction("View", new {id = bid.AuktionID});
         }
 
-        public async Task<IActionResult> Search(SearchViewModel searchModel)
+        public async Task<IActionResult> Search(SearchViewModel searchModel, int? page)
         {
-            AuktionBudPageinatedViewModel auktionModel = await _service.ListAuktionBudsPaginatedAsync();
-            var model = new SearchResultsViewModel
-            {
-                AuktionModel = auktionModel,
-                SearchModel = searchModel
-            };
+            SearchResultsViewModel model = await _service.SearchAuktionBudsPaginatedAsync(searchModel, page ?? 1);
 
             return View(model);
         }
