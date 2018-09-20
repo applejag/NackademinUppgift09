@@ -11,7 +11,7 @@ namespace Nauktion.Repositories
     {
         public Uri BaseAddress { get; } = new Uri(@"http://nackowskis.azurewebsites.net/api/");
 
-        public int Gruppkod { get; } = 1;
+        public int Gruppkod { get; } = 1170;
 
         private readonly HttpClient _client;
 
