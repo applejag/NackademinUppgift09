@@ -24,7 +24,7 @@ namespace Nauktion.Models
         {
             NumOfPages = MathHelpers.DivCeil(totalCount, MODELS_PER_PAGE);
             TotalModelCount = totalCount;
-            Page = page = Math.Clamp(page, 1, NumOfPages);
+            Page = page = Math.Max(Math.Min(page, NumOfPages), 1);
             Model = model;
         }
 
