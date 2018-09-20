@@ -1,0 +1,25 @@
+﻿@model PaginationViewModel
+
+<nav>
+    <ul class="pager">
+        @if (Model.Page > 1)
+        {
+            <li><a asp-route-page="@(Model.Page - 1)" asp-all-route-data="@Model.Model.SerializeToDictionary()">Nyare</a></li>
+        }
+        else
+        {
+            <li class="disabled"><a href="javascript:void(0);" title="Du är på första sidan." data-toggle="tooltip">Nyare</a></li>
+        }
+
+        <li class="text-muted" title="Visar auktioner @(Model.StartIndex + 1)&ndash;@(Model.StopIndex + 1), utav totalt @Model.TotalModelCount st" data-toggle="tooltip">Sida @Model.Page av @Model.NumOfPages</li>
+
+        @if (Model.Page < Model.NumOfPages)
+        {
+            <li><a asp-route-page="@(Model.Page + 1)" asp-all-route-data="@Model.Model.SerializeToDictionary()">Äldre</a></li>
+        }
+        else
+        {
+            <li class="disabled"><a href="javascript:void(0);" title="Du är på sista sidan." data-toggle="tooltip">Äldre</a></li>
+        }
+    </ul>
+</nav>

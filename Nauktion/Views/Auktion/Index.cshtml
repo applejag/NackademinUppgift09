@@ -1,4 +1,4 @@
-﻿@model AuktionBudPageinatedViewModel
+﻿@model PaginationViewModel
 
 @{
     ViewData["Title"] = "Auktioner";
@@ -6,29 +6,10 @@
 }
 
 <partial name="_SearchPartialView" model="@(new SearchViewModel())" />
-<partial name="_IndexPartialView" model="@Model" />
+<partial name="_IndexPartialView" model="@((List<AuktionBudViewModel>)Model.Model)" />
+<partial name="_PaginationPartialView" model="@Model.GetWithoutModel()"/>
 
-
-<nav>
-    <ul class="pager">
-        @if (Model.Page > 1)
-        {
-            <li><a asp-action="Index" asp-route-page="@(Model.Page - 1)">Nyare</a></li>
-        }
-        else
-        {
-            <li class="disabled"><a href="javascript:void(0);" title="Du är på första sidan." data-toggle="tooltip">Nyare</a></li>
-        }
-
-        <li class="text-muted" title="Visar auktioner @(Model.StartIndex + 1)&ndash;@(Model.StopIndex + 1), utav totalt @Model.TotalModelCount st" data-toggle="tooltip">Sida @Model.Page av @Model.NumOfPages</li>
-
-        @if (Model.Page < Model.NumOfPages)
-        {
-            <li><a asp-action="Index" asp-route-page="@(Model.Page + 1)">Äldre</a></li>
-        }
-        else
-        {
-            <li class="disabled"><a href="javascript:void(0);" title="Du är på sista sidan." data-toggle="tooltip">Äldre</a></li>
-        }
-    </ul>
-</nav>
+@section Scripts
+{
+    <partial name="_TooltipPartialView"/>
+}

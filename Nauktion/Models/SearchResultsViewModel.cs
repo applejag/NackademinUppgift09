@@ -1,8 +1,10 @@
-﻿namespace Nauktion.Models
+﻿using System.Collections.Generic;
+
+namespace Nauktion.Models
 {
     public class SearchResultsViewModel
     {
         public SearchViewModel SearchModel { get; set; }
-        public AuktionBudPageinatedViewModel AuktionModel { get; set; }
+        public List<AuktionBudViewModel> AuktionModel { get; set; }
     }
 }

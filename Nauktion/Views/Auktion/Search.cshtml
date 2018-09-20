@@ -1,32 +1,16 @@
-﻿@model SearchResultsViewModel
+﻿@model PaginationViewModel
 @{
-    ViewData["Title"] = "Sök - " + Model.AuktionModel.TotalModelCount + " st resultat";
+    var searchResults = (SearchResultsViewModel)Model.Model;
+
+    ViewData["Title"] = "Sök - " + Model.TotalModelCount + " st resultat";
     ViewData["Message"] = "Hitta den auktion du letar efter.";
 }
 
-<partial name="_SearchPartialView" model="@Model.SearchModel" />
-<partial name="_IndexPartialView" model="@Model.AuktionModel" />
+<partial name="_SearchPartialView" model="@searchResults.SearchModel" />
+<partial name="_IndexPartialView" model="@searchResults.AuktionModel" />
+<partial name="_PaginationPartialView" model="@Model.GetWithOtherModel(searchResults.SearchModel)" />
 
-<nav>
-    <ul class="pager">
-        @if (Model.AuktionModel.Page > 1)
-        {
-        <li><a asp-action="Search" asp-all-route-data="@Model.SearchModel.SerializeToDictionary()" asp-route-page="@(Model.AuktionModel.Page - 1)">Nyare</a></li>
-        }
-        else
-        {
-        <li class="disabled"><a href="javascript:void(0);" title="Du är på första sidan." data-toggle="tooltip">Nyare</a></li>
-        }
-
-        <li class="text-muted" title="Visar auktioner @(Model.AuktionModel.StartIndex + 1)&ndash;@(Model.AuktionModel.StopIndex + 1), utav totalt @Model.AuktionModel.TotalModelCount st" data-toggle="tooltip">Sida @Model.AuktionModel.Page av @Model.AuktionModel.NumOfPages</li>
-
-        @if (Model.AuktionModel.Page < Model.AuktionModel.NumOfPages)
-        {
-        <li><a asp-action="Search" asp-all-route-data="@Model.SearchModel.SerializeToDictionary()" asp-route-page="@(Model.AuktionModel.Page + 1)">Äldre</a></li>
-        }
-        else
-        {
-        <li class="disabled"><a href="javascript:void(0);" title="Du är på sista sidan." data-toggle="tooltip">Äldre</a></li>
-        }
-    </ul>
-</nav>
+@section Scripts
+{
+    <partial name="_TooltipPartialView" />
+}

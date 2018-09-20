@@ -26,48 +26,57 @@ namespace Nauktion.Helpers
         }
 
         [NotNull, ItemNotNull]
-        public static async Task<AuktionBudPageinatedViewModel> ListAuktionBudsPaginatedAsync(this IAuktionService service, int page = 1, bool includeClosed = false)
+        public static async Task<PaginationViewModel> ListAuktionBudsPaginatedAsync(this IAuktionService service, int page = 1, bool includeClosed = false)
         {
             List<AuktionModel> auktions = await service.ListAuktionsAsync(includeClosed);
+            var auktionBudView = new List<AuktionBudViewModel>();
 
-            var viewModel = new AuktionBudPageinatedViewModel(ref page, auktions);
+            var viewModel = new PaginationViewModel(ref page, auktions.Count, auktionBudView);
 
+            // Fill list please
             foreach (AuktionModel a in auktions
                 .Skip(viewModel.StartIndex)
-                .Take(AuktionBudPageinatedViewModel.MODELS_PER_PAGE))
+                .Take(PaginationViewModel.MODELS_PER_PAGE))
             {
                 List<BudModel> buds = await service.ListBudsAsync(a.AuktionID);
-                viewModel.Models.Add(new AuktionBudViewModel(a, buds));
+                auktionBudView.Add(new AuktionBudViewModel(a, buds));
             }
 
             return viewModel;
         }
 
         [NotNull, ItemNotNull]
-        public static async Task<SearchResultsViewModel> SearchAuktionBudsPaginatedAsync(this IAuktionService service, SearchViewModel search, int page = 1)
+        public static async Task<PaginationViewModel> SearchAuktionBudsPaginatedAsync(this IAuktionService service, SearchViewModel search, int page = 1)
         {
+            // Gather auktions list
             List<AuktionModel> auktions = (await service.ListAuktionsAsync(true))
                 .Where(search.Matches).ToList();
 
-            var viewModel = new AuktionBudPageinatedViewModel(ref page, auktions);
-
+            // Gather auktions+buds list
+            var auktionBudView = new List<AuktionBudViewModel>();
             foreach (AuktionModel a in auktions)
             {
                 List<BudModel> buds = await service.ListBudsAsync(a.AuktionID);
-                viewModel.Models.Add(new AuktionBudViewModel(a, buds));
+                auktionBudView.Add(new AuktionBudViewModel(a, buds));
             }
 
-            viewModel.Models = viewModel.Models
-                .OrderBy(a => a, search.GetSortingComparer())
-                .Skip(viewModel.StartIndex)
-                .Take(AuktionBudPageinatedViewModel.MODELS_PER_PAGE)
-                .ToList();
+            // Order whole list
+            auktionBudView.Sort(search.GetSortingComparer());
 
-            return new SearchResultsViewModel
+            // Prepare paginated model
+            var pageinated = new PaginationViewModel(ref page, auktions.Count);
+
+            pageinated.Model = new SearchResultsViewModel
             {
-                AuktionModel = viewModel,
-                SearchModel = search
+                SearchModel = search,
+                // Take items for this page
+                AuktionModel = auktionBudView
+                    .Skip(pageinated.StartIndex)
+                    .Take(PaginationViewModel.MODELS_PER_PAGE)
+                    .ToList()
             };
+
+            return pageinated;
         }
 
         [NotNull, ItemCanBeNull]

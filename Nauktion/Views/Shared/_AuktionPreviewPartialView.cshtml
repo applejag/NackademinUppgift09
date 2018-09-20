@@ -11,7 +11,7 @@
 <div class="panel @(itsmine ? "panel-warning" : "panel-info")">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <a asp-action="View" asp-route-id="@Model.AuktionID">
+            <a asp-action="View" asp-controller="Auktion" asp-route-id="@Model.AuktionID">
                 @Model.Titel
             </a>
             <span class="pull-right label label-success">

@@ -1,10 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject UserManager<NauktionUser> UserManager
-@model AuktionBudPageinatedViewModel
+@model List<AuktionBudViewModel>
 
 @{
-    var list1 = Model.Models.EveryOther();
-    var list2 = Model.Models.Skip(1).EveryOther();
+    var list1 = Model.EveryOther();
+    var list2 = Model.Skip(1).EveryOther();
 }
 
 <article class="row">
@@ -22,18 +22,9 @@
         }
     </div>
 </article>
-@if (Model.Models.Count == 0)
+@if (Model.Count == 0)
 {
     <article>
         <i class="text-muted">(Det finns inga öppna auktioner just nu. Titta förbi senare!)</i>
     </article>
-}
-
-@section Scripts
-    {
-    <script type="text/javascript">
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
 }

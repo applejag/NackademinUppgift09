@@ -26,7 +26,7 @@ namespace Nauktion.Controllers
         
         public async Task<IActionResult> Index(int? page)
         {
-            AuktionBudPageinatedViewModel model = await _service.ListAuktionBudsPaginatedAsync(page ?? 1);
+            PaginationViewModel model = await _service.ListAuktionBudsPaginatedAsync(page ?? 1);
 
             if (page.HasValue && (page < 1 || page > model.NumOfPages))
             {
@@ -86,7 +86,7 @@ namespace Nauktion.Controllers
 
         public async Task<IActionResult> Search(SearchViewModel searchModel, int? page)
         {
-            SearchResultsViewModel model = await _service.SearchAuktionBudsPaginatedAsync(searchModel, page ?? 1);
+            PaginationViewModel model = await _service.SearchAuktionBudsPaginatedAsync(searchModel, page ?? 1);
 
             return View(model);
         }
