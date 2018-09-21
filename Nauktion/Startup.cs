@@ -65,20 +65,7 @@ namespace Nauktion
                 var cultureInfoSvSe = new CultureInfo("sv-SE");
                 locOptions.DefaultRequestCulture = new RequestCulture(cultureInfoSvSe);
                 locOptions.SupportedCultures =
-                locOptions.SupportedUICultures = new[]
-                {
-                    new CultureInfo("en-US"),
-                    new CultureInfo("en-AU"),
-                    new CultureInfo("en-GB"),
-                    new CultureInfo("en"),
-                    new CultureInfo("es-ES"),
-                    new CultureInfo("es-MX"),
-                    new CultureInfo("es"),
-                    new CultureInfo("fr-FR"),
-                    new CultureInfo("fr"),
-                    cultureInfoSvSe,
-                    new CultureInfo("sv"),
-                };
+                locOptions.SupportedUICultures = new[] { cultureInfoSvSe };
             });
             app.UseAuthentication();
             app.UseHttpsRedirection();
