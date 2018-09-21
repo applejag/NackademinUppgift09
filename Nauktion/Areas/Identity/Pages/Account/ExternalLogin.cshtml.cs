@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Nauktion.Helpers;
 using Nauktion.Models;
 
 namespace Nauktion.Areas.Identity.Pages.Account
@@ -119,6 +120,7 @@ namespace Nauktion.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, NauktionRoles.Regular);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
